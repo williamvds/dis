@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+'''Convert a UKRI XML dataset to CSV.
+Expected format is:
+<records>
+    <record></record>
+    ...
+</records>
+
+Children of records will be flattened, with only the first sub-child being kept.
+'''
+
+import argparse, csv, re, io, sys, os, xml.etree.ElementTree as ET
+from typing import List, Optional
+import os.path as path
+
+usage_example = '''example: \
+    ukriXmlToCsv \
+        --fields name line1 line2 line3 line4 line5 postCode country \
+        --output . \
+        organisations.xml'''
+
+parser = argparse.ArgumentParser(
+    description='Convert UKRI XML record collections to CSV',
+    epilog=usage_example)
+parser.add_argument('--fields', '-f',
+    nargs='+', metavar='pattern', action='extend', type=str,
+    help='patterns of fields to include in the output')
+parser.add_argument('--output', '-o',
+    default='.',
+    help='output directory for the converted files')
+parser.add_argument('files',
+    metavar='file', nargs='+',
+    help='XML files to convert')
+
+args = parser.parse_args()
+
+os.makedirs(args.output, exist_ok=True)
+
+def strip_namespace(field_tag: str) -> str:
+    '''Remove the namespace from a field's tag'''
+    i = field_tag.find('}')
+    if i >= 0:
+        field_tag = field_tag[i + 1:]
+    return field_tag
+
+def match_field_name(field: ET.Element) -> Optional[str]:
+    '''Return whether a field with a specific tag should be filtered, according
+    to the ignored field filters'''
+    field_name = strip_namespace(field.tag)
+    for pattern in args.fields:
+        if re.match(pattern, field_name):
+            return pattern
+    return None
+
+def filter_fields(fields: List[ET.Element]):
+    return list(filter(lambda f: match_field_name(f) != None, fields))
+
+def xml_to_csv(fname: str) -> str:
+    output = io.StringIO()
+    tree = ET.parse(fname, parser=ET.XMLParser(encoding='utf-8'))
+
+    writer = csv.DictWriter(output, fieldnames=args.fields, delimiter=',')
+    writer.writeheader()
+
+    for record in tree.getroot():
+        record_dict: dict[(str, str)] = dict()
+        fields = filter_fields(list(record))
+
+        # Flatten fields
+        for field in record:
+            children = list(field)
+            if children:
+                if len(children) > 1:
+                    print('Warning: more than one child in flattened field ' \
+                          f"{field.tag}", file=sys.stderr)
+                fields.extend(filter_fields(field[0]))
+
+        for field in fields:
+            field_name = match_field_name(field)
+            if field_name:
+                record_dict[field_name] = field.text.strip()
+
+        writer.writerow(record_dict)
+
+    return output.getvalue()
+
+for f in args.files:
+    csv = xml_to_csv(f)
+    csv_name = path.join(args.output,
+        path.splitext(path.basename(f))[0] + '.csv')
+
+    with open(csv_name, 'w', encoding='utf-8') as out:
+        out.write(csv)

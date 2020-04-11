@@ -1,0 +1,6 @@
+_minted-input/
+pics/*.png
+scripts/test.sql
+data
+*.db
+*.pdf

@@ -1,0 +1,108 @@
+% https://tex.stackexchange.com/a/393606
+
+\usepackage[utf8]{inputenc} % utf8
+\usepackage[T1]{fontenc}    % 8-bit font encoding
+\usepackage{xcolor}
+\usepackage{pgfgantt}
+\def\pgfcalendarweekdayletter#1{
+    %
+    \ifcase#1Mo\or Di\or Mi\or Do\or Fr\or \textcolor{red}{Sa}\or \textcolor{red}{So}\fi
+    %
+}
+
+\makeatletter
+\usepackage{etoolbox}
+
+% patching pgfgnatt
+% insert hook before drawing the grid
+\patchcmd{\endganttchart}{\ifgtt@vgrid}{\gtt@before@grid\ifgtt@vgrid}{}{%
+    \GenericWarning{(preamble)\@spaces\@spaces\@spaces\@spaces}{Package preamble Warning: patching ganttchart environment did not work (2).}}
+% insert hook after drawing the grid
+\patchcmd{\endganttchart}{\def\@tempa{none}}{\gtt@after@grid\def\@tempa{none}}{}{%
+    \GenericWarning{(preamble)\@spaces\@spaces\@spaces\@spaces}{Package preamble Warning: patching ganttchart environment did not work (3).}}
+% insert macro for collecting data for milestone lines
+% crazy patching, because LaTeX internally defines '\\gtt@chartelement' for macros with optional arguments
+\expandafter\patchcmd\expandafter{\csname\string\gtt@chartelement\endcsname}%
+    {\gtt@tsstojulian{#4}{\gtt@right@slot}}{\gtt@store@ms@line{#5}\gtt@tsstojulian{#4}{\gtt@right@slot}}{}{%
+    \GenericWarning{(preamble)\@spaces\@spaces\@spaces\@spaces}{Package preamble Warning: patching ganttchartelement did not work.}}
+
+% for drawing vgrid lines differently befoe and after weekend
+\newif\ifgtt@vgrid@weekend
+\gtt@vgrid@weekendfalse
+\newcommand*{\gtt@vgridweek@assemblestyle}{%
+    \ifgtt@vgrid\ifgtt@vgrid@weekend
+        \pgfcalendarjuliantoweekday{\gtt@startjulian}{\@tempcntb}%
+            \edef\gtt@vgridstyle{*4{\gtt@vgridstyle@week},{draw=none},%
+                \gtt@vgridstyle@week,\gtt@vgridstyle@weekend}%
+    \fi\fi
+}
+
+% color the weekend
+\newcommand*{\gtt@weekend@draw}{%
+    \def\@tempa{none}%
+    \ifx\gtt@weekend@background\@tempa\else
+        \pgfcalendarjuliantoweekday{\gtt@startjulian}{\@tempcntb}%
+        \gtt@currgrid=1\relax%
+        \global\advance\gtt@chartwidth by-1\relax%
+        \foreach \x in {0,...,\gtt@chartwidth} {%
+            \pgfmathsetcount{\@tempcnta}{mod(\x+\@tempcntb,7)}%
+            \ifnum\@tempcnta>4\relax
+                \expandafter\fill\expandafter[\gtt@weekend@background]
+                    (\x * \ganttvalueof{x unit}, \y@upper pt) rectangle%
+                    (\x * \ganttvalueof{x unit} + \ganttvalueof{x unit}, \y@lower pt);%
+            \fi
+        }%
+        \global\advance\gtt@chartwidth by1\relax%
+        % redraw the canvas node, but without filling it
+        \node [/pgfgantt/canvas, minimum width=\x@size pt,
+            minimum height=\y@size pt, fill=none]
+            at (\x@size pt / 2, \y@mid pt) {};%
+
+    \fi
+}
+
+%lines for milestones
+\newif\ifgtt@milestone@line
+\newcommand*{\gtt@milestone@lines}{}
+\newcommand*{\gtt@store@ms@line}[1]{%
+    \def\@tempa{#1}\def\@tempb{milestone}%
+    \ifx\@tempa\@tempb
+        \ifgtt@milestone@line
+            \xdef\gtt@milestone@lines{\gtt@milestone@lines,\the\gtt@left@slot}%
+        \fi
+    \fi
+}
+
+\newcommand*{\gtt@draw@milestone@lines}{%
+    \ifx\gtt@milestone@lines\@empty\else
+        \expandafter\gtt@@draw@milestone@lines\gtt@milestone@lines\gtt@msl@end%
+    \fi
+}
+
+\newcommand*{\gtt@@draw@milestone@lines}{}
+\def\gtt@@draw@milestone@lines,#1\gtt@msl@end{%
+    \foreach \x in {#1}{%
+        \draw[/pgfgantt/milestone line style]
+            (\x * \ganttvalueof{x unit}, \y@upper pt) --
+            (\x * \ganttvalueof{x unit}, \y@lower pt);
+    }
+}
+
+% fill the hooks
+\newcommand*{\gtt@before@grid}{\gtt@vgridweek@assemblestyle\gtt@weekend@draw}
+\newcommand*{\gtt@after@grid}{\gtt@draw@milestone@lines}
+
+% options
+\ganttset{%
+    vgridweek/.code 2 args={%
+        \gtt@vgridtrue\gtt@vgrid@weekendtrue
+        \def\gtt@vgridstyle@week{#1}%
+        \def\gtt@vgridstyle@weekend{#2}%
+    },
+    weekend background/.store in=\gtt@weekend@background,
+    weekend background=none,
+    milestone line/.is if=gtt@milestone@line,
+    milestone line=false,
+    milestone line style/.style={blue,thick},
+}
+\makeatother

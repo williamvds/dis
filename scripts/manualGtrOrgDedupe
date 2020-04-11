@@ -1,0 +1,157 @@
+#!/usr/bin/env python3
+'''Manually de-duplicate similar Gateway to Research organisations
+'''
+
+import argparse
+import math
+from pprint import pp
+
+import psycopg2
+import psycopg2.extras
+from psycopg2.extensions import connection
+
+from typing import List
+
+USAGE_EXAMPLE = '''example: \
+    manualGtrOrgDedupe \
+        --database gtr \
+        --user gtr \
+        --host localhost
+'''
+
+ORG_URL='https://gtr.ukri.org/organisation/'
+
+LIST_QUERY='''
+SELECT
+    o1.orgUuid  AS o1_uuid,
+    o1.name     AS o1_name,
+    o1.address1 AS o1_address1,
+    o1.address2 AS o1_address2,
+    o1.address3 AS o1_address3,
+    o1.address4 AS o1_address4,
+    o1.address5 AS o1_address5,
+    o1.postCode AS o1_postCode,
+    o1.city     AS o1_city,
+    o1.region   AS o1_region,
+    o1.country  AS o1_country,
+    CONCAT(%(orgUrl)s, UPPER(o1.orgUuid::text)) AS o1_url,
+
+    o2.orgUuid  AS o2_uuid,
+    o2.name     AS o2_name,
+    o2.address1 AS o2_address1,
+    o2.address2 AS o2_address2,
+    o2.address3 AS o2_address3,
+    o2.address4 AS o2_address4,
+    o2.address5 AS o2_address5,
+    o2.postCode AS o2_postCode,
+    o2.city     AS o2_city,
+    o2.region   AS o2_region,
+    o2.country  AS o2_country,
+    CONCAT(%(orgUrl)s, UPPER(o2.orgUuid::text)) AS o2_url
+FROM
+    duplicateGtrOrgs s
+    INNER JOIN gtrOrgs o1
+        ON o1.orgUuid = s.orgUuid
+    INNER JOIN gtrOrgs o2
+        ON o2.orgUuid = s.duplicateUuid
+WHERE NOT EXISTS(
+    SELECT FROM similarGtrOrgs s
+    WHERE
+        s.orgUuid1 IN (o1.orgUuid, o2.orgUuid)
+    AND s.orgUuid2 IN (o1.orgUuid, o2.orgUuid)
+    AND manualResult IS NOT NULL
+)
+ORDER BY
+    random() DESC;
+'''
+
+UPDATE_QUERY='''
+UPDATE similarGtrOrgs
+SET manualResult = %(result)s
+WHERE
+        orgUuid1 = %(orgUuid)s
+    AND orgUuid2 = %(duplicateUuid)s;
+'''
+
+parser = argparse.ArgumentParser(
+    description='Manually de-duplicate similar Gateway to Research organisations',
+    epilog=USAGE_EXAMPLE)
+
+parser.add_argument('--database', '-d', 
+        default='dis',
+        help='name of database')
+parser.add_argument('--user',     '-u',
+        default='postgres',
+        help='user to connect as')
+parser.add_argument('--host',     '-H',
+        default='localhost',
+        help='host of database')
+parser.add_argument('--port',     '-p',
+        help='port of database')
+parser.add_argument('--password', '-P',
+        help='password of database')
+parser.add_argument('--count', '-c',
+        default=100,
+        help='number of pairs to process')
+
+def getList(con: connection) -> List[dict]:
+    with con.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+        cur.execute(LIST_QUERY, {
+            'orgUrl': ORG_URL,
+            })
+        return cur.fetchall()
+
+def filterByOrg(record: dict, orgIndex: int) -> dict:
+    return {k[3:]:v for k, v in record.items() if k.startswith(f'o{orgIndex}_')}
+
+def updateOrg(con: connection, record: dict, result: bool):
+    with con.cursor() as cur:
+        cur.execute(UPDATE_QUERY, {
+            'result': result,
+            'orgUuid': record['o1_uuid'],
+            'duplicateUuid': record['o2_uuid']
+            })
+
+def main():
+    args = parser.parse_args()
+    con: connection = psycopg2.connect(
+        host = args.host,
+        port = args.port,
+        dbname = args.database,
+        user = args.user,
+        password = args.password
+    )
+
+    orgs = getList(con)
+    count: int = 0
+
+    try:
+        for org in orgs:
+            if count >= args.count:
+                break
+
+            print(f"\nProcessed: {count + 1}/{args.count}")
+            org = dict(org)
+            
+            print()
+            pp(filterByOrg(org, 1))
+            print('\n')
+            pp(filterByOrg(org, 2))
+
+            res = input(
+                    "\nAre the two above organisations the same? (y/n/q): ")\
+                    .lower()
+
+            if res.startswith('y'):
+                count += 1
+                updateOrg(con, org, True)
+            elif res.startswith('n'):
+                count += 1
+                updateOrg(con, org, False)
+            elif res.startswith('q'): break
+
+    finally:
+        con.commit()
+
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+URL='https://gtr.ukri.org/gtr/api/'
+PAUSE=4
+NUM_PAGES_XPATH='string(/*/@*[local-name()="totalPages"])'
+OUTPUT='.'
+
+# Parse options: https://stackoverflow.com/a/14203146
+TYPES=()
+while [[ $# -gt 0 ]]; do
+	key="$1"
+
+	case $key in
+		-o|--output)      OUTPUT="$2";          shift 2;;
+		-u|--url)         URL="$2";             shift 2;;
+		-p|--pause)       PAUSE="$2";           shift 2;;
+		-x|--pages-xpath) NUM_PAGES_XPATH="$2"; shift 2;;
+		*)                TYPES+=("$1");        shift 1;;
+	esac
+done
+
+set -- "${TYPES[@]}"
+
+if [ "${#TYPES[@]}" == 0 ]; then
+	echo "No record types specified"
+	exit 1
+fi
+
+for typ in "$TYPES"; do
+	case "$typ" in
+		or*) recordType='organisations';;
+		ou*) recordType='outcomes';;
+		pe*) recordType='persons';;
+		pr*) recordType='projects';;
+		*) (>&2 echo "Unknown record type '$typ' - skipping"); continue;;
+	esac
+
+	url="$URL$recordType"
+	mkdir -p "$OUTPUT/$recordType"
+
+	function getPageURL {
+		echo "$url?p=$1&s=100"
+	}
+
+	function getPageFile {
+		echo "$OUTPUT/$recordType/$(printf '%04d' "$1").xml"
+	}
+
+	function xmlCount {
+		awk '{s+=$1} END {print s}' <(xmllint --xpath 'count(/*/*)' $*)
+	}
+
+	file1="$(getPageFile 1)"
+	curl "$(getPageURL 1)" -so "$file1"
+	numPages=$(xmllint --xpath "$NUM_PAGES_XPATH" "$file1")
+
+	echo "Total pages: $numPages"
+
+	for i in $(seq 2 $numPages); do
+		file="$(getPageFile $i)"
+		[ -f "$file" ] && continue
+		sleep "$PAUSE"
+		echo "Downloading page $i of $numPages"
+		curl "$(getPageURL $i)" -so "$file"
+		[ $? ] || break
+	done
+
+	merged="$OUTPUT/$recordType.xml"
+	pages="$OUTPUT/$recordType/*.xml"
+	if ! [ -f "$merged" ] || \
+	   ! [ "$(xmlCount "$merged")" = "$(xmlCount "$pages")" ]; then
+		echo "Merging into a single file..."
+		"$(basename $0)"/mergeXML "$pages" >"$merged"
+	else
+		echo "Merged file contains all records: $merged"
+	fi
+done

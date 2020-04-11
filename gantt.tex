@@ -1,0 +1,52 @@
+\begin{ganttchart}[
+	today=2019-12-6,
+	today label=Today,
+	expand chart=\textwidth,
+	vgridweek={draw=none}{dotted},
+	time slot format=isodate,
+	y unit title=0.6cm,
+	title height=1,
+	title top shift=0,
+	y unit chart=0.6cm,
+	bar height=0.7,
+	bar top shift=0,
+	group height=0.15,
+	milestone/.append style={xscale=6},
+]{2019-10-01}{2020-05-23}
+	\gantttitlecalendar{year, month=shortname} \\
+
+	\ganttgroup{Aggregation}{2019-10-20}{2019-12-9} \\
+	\ganttbar{Exporting}{2019-10-20}{2019-11-4} \\
+	\ganttbar{Normalisation}{2019-11-5}{2019-11-11} \\
+	\ganttbar{Database design}{2019-11-12}{2019-11-26} \\
+	\ganttbar{Importing}{2019-11-27}{2019-12-9} \\
+	\\
+	\ganttgroup{Linking}{2019-11-27}{2019-12-31} \\
+	\ganttbar{Cleaning}{2019-11-27}{2019-12-03} \\
+	\ganttbar{De-duplication}{2019-12-04}{2019-12-12} \\
+	\ganttbar{Research}{2019-12-13}{2019-12-24} \\
+	\ganttbar{Linking}{2019-12-13}{2019-12-31} \\
+	\\
+	\ganttgroup{Analysis}{2020-1-1}{2020-3-16} \\
+	\ganttbar{Research}{2020-1-1}{2020-2-10} \\
+	\ganttbar{Creating software}{2020-1-14}{2020-3-2} \\
+	\ganttbar{Network analysis}{2020-1-1}{2020-1-27} \\
+	\ganttbar{Machine learning}{2020-1-28}{2020-2-20} \\
+	\ganttbar{Visualisations}{2020-2-21}{2020-3-16} \\
+	\\
+	\ganttgroup{Evaluation}{2020-3-1}{2020-3-31} \\
+	\ganttbar{Of Analysis}{2020-3-1}{2020-3-15} \\
+	\ganttbar{Of machine learning}{2020-3-1}{2020-3-15} \\
+	\ganttbar{Conclusions}{2020-3-15}{2020-3-31} \\
+	\ganttbar{TDP feedback}{2020-3-15}{2020-3-31} \\
+	\\
+	\ganttgroup{Documentation}{2019-12-7}{2020-5-14} \\
+	\ganttbar{Interim report}{2019-11-12}{2019-12-6} \\
+	\ganttbar{Dissertation}{2019-12-7}{2020-4-20} \\
+	\ganttbar{Presentation}{2020-4-14}{2020-5-14} \\
+	\\
+	\ganttgroup[group/.style={fill=none}]{Deadlines}{2019-10-20}{2019-12-9} \\
+	\ganttmilestone{Interim report}{2019-12-6} \\
+	\ganttmilestone{Dissertation}{2020-5-4} \\
+	\ganttmilestone{Presentation}{2020-5-14}
+\end{ganttchart}
