@@ -1,5 +1,15 @@
 BEGIN;
 
+INSERT INTO junkGtrOrgs(
+	orgUuid
+)
+SELECT
+	orgUuid
+FROM
+	gtrOrgs
+WHERE name ~* '^unknown*|^unlisted*'
+ON CONFLICT DO NOTHING;
+
 INSERT INTO duplicateGtrOrgs(
 	orgUuid,
 	duplicateUuid
