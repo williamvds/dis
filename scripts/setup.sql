@@ -392,6 +392,18 @@ CREATE TABLE IF NOT EXISTS duplicateGtrOrgs(
 	PRIMARY KEY (orgUuid, duplicateUuid)
 );
 
+DO $$ BEGIN
+	CREATE TYPE orgType as ENUM(
+		'Academic',
+		'Medical',
+		'Private',
+		'Public',
+		'Unknown'
+	);
+EXCEPTION
+	WHEN duplicate_object THEN null;
+END $$; -- BEGIN
+
 CREATE TABLE IF NOT EXISTS orgs(
 	gtrOrgUuid uuid PRIMARY KEY NOT NULL,
 	name text not null,
@@ -403,24 +415,8 @@ CREATE TABLE IF NOT EXISTS orgs(
 	postCode text,
 	city text,
 	region gtrRegion NOT NULL DEFAULT 'Unknown',
-	country text
-);
-
--- Organisation classification
-
-DO $$ BEGIN
-	CREATE TYPE orgType as ENUM(
-		'Public',
-		'Private',
-		'Academic'
-	);
-EXCEPTION
-	WHEN duplicate_object THEN null;
-END $$; -- BEGIN
-
-CREATE TABLE IF NOT EXISTS orgTypes(
-	gtrOrgUuid uuid REFERENCES orgs,
-	type orgType NOT NULL
+	country text,
+	type orgType DEFAULT 'Unknown'
 );
 
 -- Merged people
