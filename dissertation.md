@@ -1245,21 +1245,46 @@ both projects and organisations. Both curves show that the top 20% of
 organisations and projects account for the vast majority of funding received
 from UKRI.
 
+\pgfplotstableread[col sep=comma]{data/orgFundingPercentileCollab.csv}\data
 \begin{figure}[H]
 	\centering
 	\begin{tikzpicture}
 	\begin{axis}[
 		xlabel=Funding Percentile,
 		ylabel=Organisations,
-	]
-		\addplot+ [
-			smooth,
+		mark=none,
+		stack plots=y,
+		area style,
+		legend style={
 			mark=none,
-		] table [
+		},
+		legend pos=outer north east,
+	]
+		\addplot+ table [
 			x=percentile,
-			y=value,
-			col sep=comma,
-		] {data/orgFundingPercentileCollab.csv};
+			y=unknown,
+		] {\data} \closedcycle;
+		\addlegendentry{Unknown}
+		\addplot+ table [
+			x=percentile,
+			y=academic,
+		] {\data} \closedcycle;
+		\addlegendentry{Academic}
+		\addplot+ table [
+			x=percentile,
+			y=medical,
+		] {\data} \closedcycle;
+		\addlegendentry{Medical}
+		\addplot+ table [
+			x=percentile,
+			y=private,
+		] {\data} \closedcycle;
+		\addlegendentry{Private}
+		\addplot+ table [
+			x=percentile,
+			y=public,
+		] {\data} \closedcycle;
+		\addlegendentry{Public}
 	\end{axis}
 	\end{tikzpicture}
 	\caption{Total number of organisations that have collaborated with at least

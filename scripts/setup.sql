@@ -8,6 +8,9 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- Provides similarity comparisons
 CREATE EXTENSION IF NOT EXISTS "pg_trgm";
 
+-- Provides crosstab()
+CREATE EXTENSION IF NOT EXISTS "tablefunc";
+
 -- GtR organisations
 -- based on https://gtr.ukri.org/gtr/api
 -- and https://gtr.ukri.org/gtr/api/organisation
