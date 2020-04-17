@@ -173,7 +173,12 @@ BEGIN
 	FOREACH fraction in ARRAY fractions LOOP
 		INSERT INTO res
 		SELECT
-			*
+			COALESCE(ct.fraction, 0) AS fraction,
+			COALESCE(ct.academic, 0) AS academic,
+			COALESCE(ct.medical,  0) AS medical,
+			COALESCE(ct.public,   0) AS public,
+			COALESCE(ct.private,  0) AS private,
+			COALESCE(ct.unknown,  0) AS unknown
 		FROM crosstab('
 			SELECT
 				ROUND('||fraction||' * 100)::int,
@@ -365,7 +370,12 @@ BEGIN
 	FOREACH fraction in ARRAY fractions LOOP
 		INSERT INTO res
 		SELECT
-			*
+			COALESCE(ct.fraction, 0) AS fraction,
+			COALESCE(ct.academic, 0) AS academic,
+			COALESCE(ct.medical,  0) AS medical,
+			COALESCE(ct.public,   0) AS public,
+			COALESCE(ct.private,  0) AS private,
+			COALESCE(ct.unknown,  0) AS unknown
 		FROM crosstab('
 			SELECT
 				ROUND('||fraction||' * 100)::int,
