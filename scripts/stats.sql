@@ -162,27 +162,56 @@ FUNCTION OrgProjectPercentileDist(
 	lowerBound int DEFAULT 0,
 	upperBound int DEFAULT 100
 )
-RETURNS TABLE("percentile" int, "value" bigint) AS $$
+RETURNS SETOF PercentileInt AS $$
 DECLARE
 	fractions numeric[] := PERCENTILE_FRACTIONS(lowerBound, upperBound);
+	fraction numeric;
 BEGIN
-	RETURN QUERY
-	SELECT
-		ROUND(fractions.upperBound * 100)::int,
-		(SELECT
-			COUNT(*)
-		FROM (
+	DROP TABLE IF EXISTS res;
+	CREATE TEMP TABLE IF NOT EXISTS res OF PercentileInt;
+
+	FOREACH fraction in ARRAY fractions LOOP
+		INSERT INTO res
+		SELECT
+			*
+		FROM crosstab('
 			SELECT
+				ROUND('||fraction||' * 100)::int,
+				type,
 				COUNT(*)
-			FROM
-				orgProjectPercentiles
-			WHERE
-				rank <= fractions.upperBound
-			GROUP BY orgUuid
-		) q
-		WHERE count > 0
-		) AS result
-	FROM unnest(fractions) AS fractions(upperBound);
+			FROM (
+				SELECT
+					COALESCE(type, ''Unknown'') AS type,
+					COUNT(*)
+				FROM
+					orgProjectPercentiles opp
+					INNER JOIN orgs o
+						ON o.gtrOrgUuid = opp.orgUuid
+				WHERE
+					rank <= '||fraction||'
+				GROUP BY orgUuid, type
+				ORDER BY 1, 2
+			) q
+			WHERE count > 0
+			GROUP BY type
+			',
+			'VALUES
+				(''Academic''::orgType),
+				(''Medical''),
+				(''Public''),
+				(''Private''),
+				(''Unknown'')'
+		) AS ct (
+			fraction numeric,
+			academic bigint,
+			medical bigint,
+			public bigint,
+			private bigint,
+			unknown bigint
+		);
+	END LOOP;
+
+	RETURN QUERY SELECT * FROM res;
 END; $$ -- FUNCTION
 LANGUAGE plpgsql;
 

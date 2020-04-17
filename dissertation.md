@@ -1128,20 +1128,47 @@ exponential past the 90th percentile:
 Visualising the distribution of organisations within these percentiles shows a
 similar pattern: the vast majority are involved with only one or two projects:
 
+\pgfplotstableread[col sep=comma]{data/orgProjectPercentileDist.csv}\data
 \begin{figure}[H]
 	\centering
 	\begin{tikzpicture}
 	\begin{axis}[
 		xlabel=Project involvement percentile,
 		ylabel=Organisations,
-	]
-		\addplot+ [
+		ymin=0,
+		mark=none,
+		stack plots=y,
+		area style,
+		legend style={
 			mark=none,
-		] table [
+		},
+		legend pos=outer north east,
+	]
+		\addplot+ table [
 			x=percentile,
-			y=value,
-			col sep=comma,
-		] {data/orgProjectPercentileDist.csv};
+			y=unknown,
+		] {\data} \closedcycle;
+		\addlegendentry{Unknown}
+		\addplot+ table [
+			x=percentile,
+			y=academic,
+		] {\data} \closedcycle;
+		\addlegendentry{Academic}
+		\addplot+ table [
+			x=percentile,
+			y=medical,
+		] {\data} \closedcycle;
+		\addlegendentry{Medical}
+		\addplot+ table [
+			x=percentile,
+			y=private,
+		] {\data} \closedcycle;
+		\addlegendentry{Private}
+		\addplot+ table [
+			x=percentile,
+			y=public,
+		] {\data} \closedcycle;
+		\addlegendentry{Public}
 	\end{axis}
 	\end{tikzpicture}
 	\caption{Percentile distribution of organisations by total number of
