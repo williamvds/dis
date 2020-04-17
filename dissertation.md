@@ -1182,20 +1182,47 @@ By exploring the relationship between project involvement percentiles and
 collaboration, we can see that the vast majority of organisations have
 collaborated with organisations of lower percentile ranks:
 
+\pgfplotstableread[col sep=comma]{data/orgProjectPercentileCollab.csv}\data
 \begin{figure}[H]
 	\centering
 	\begin{tikzpicture}
 	\begin{axis}[
 		xlabel=Project involvement percentile,
 		ylabel=Organisations,
-	]
-		\addplot+ [
+		ymin=0,
+		mark=none,
+		stack plots=y,
+		area style,
+		legend style={
 			mark=none,
-		] table [
+		},
+		legend pos=outer north east,
+	]
+		\addplot+ table [
 			x=percentile,
-			y=value,
-			col sep=comma,
-		] {data/orgProjectPercentileCollab.csv};
+			y=unknown,
+		] {\data} \closedcycle;
+		\addlegendentry{Unknown}
+		\addplot+ table [
+			x=percentile,
+			y=academic,
+		] {\data} \closedcycle;
+		\addlegendentry{Academic}
+		\addplot+ table [
+			x=percentile,
+			y=medical,
+		] {\data} \closedcycle;
+		\addlegendentry{Medical}
+		\addplot+ table [
+			x=percentile,
+			y=private,
+		] {\data} \closedcycle;
+		\addlegendentry{Private}
+		\addplot+ table [
+			x=percentile,
+			y=public,
+		] {\data} \closedcycle;
+		\addlegendentry{Public}
 	\end{axis}
 	\end{tikzpicture}
 	\caption{Total number of organisations that have collaborated with at least

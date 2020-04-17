@@ -229,13 +229,15 @@ FUNCTION OrgProjectPercentileCollab(
 	lowerBound int DEFAULT 0,
 	upperBound int DEFAULT 100
 )
-RETURNS TABLE("percentile" int, "value" bigint) AS $$
+RETURNS SETOF PercentileInt AS $$
 DECLARE
 	fractions numeric[] := PERCENTILE_FRACTIONS(lowerBound, upperBound);
+	fraction numeric;
 BEGIN
 	CREATE TEMP TABLE IF NOT EXISTS pairedOrgProjects AS
 	SELECT
 		COALESCE(d1.orgUuid, o1.orgUuid) AS orgUuid1,
+		type,
 		o2.orgUuid AS orgUuid2,
 		rank
 	FROM
@@ -243,6 +245,8 @@ BEGIN
 		gtrOrgs o1
 		LEFT OUTER JOIN duplicateGtrOrgs d1
 			ON d1.duplicateUuid = o1.orgUuid
+		INNER JOIN orgs oo1
+			ON oo1.gtrOrgUuid = COALESCE(d1.orgUuid, o1.orgUuid)
 		-- Second organisation
 		INNER JOIN orgProjectPercentiles o2
 			ON o2.orgUuid <> o1.orgUuid
@@ -253,23 +257,54 @@ BEGIN
 			ON  po2.projectUuid = po1.projectUuid
 			AND po2.orgUuid = o2.orgUuid;
 
-	RETURN QUERY
-	SELECT
-		ROUND(fractions.upperBound * 100)::int,
-		(SELECT
-			COUNT(*)
-		FROM (
+	DROP TABLE IF EXISTS res;
+	CREATE TEMP TABLE IF NOT EXISTS res OF PercentileInt;
+
+	FOREACH fraction in ARRAY fractions LOOP
+		INSERT INTO res
+		SELECT
+			COALESCE(ct.fraction, 0) AS fraction,
+			COALESCE(ct.academic, 0) AS academic,
+			COALESCE(ct.medical,  0) AS medical,
+			COALESCE(ct.public,   0) AS public,
+			COALESCE(ct.private,  0) AS private,
+			COALESCE(ct.unknown,  0) AS unknown
+		FROM crosstab('
 			SELECT
+				ROUND('||fraction||' * 100)::int,
+				type,
 				COUNT(*)
-			FROM
-				pairedOrgProjects
-			WHERE
-				rank <= fractions.upperBound
-			GROUP BY orgUuid1
-		) q
-		WHERE count > 0
-		) AS result
-	FROM unnest(fractions) AS fractions(upperBound);
+			FROM (
+				SELECT
+					COALESCE(type, ''Unknown'') AS type,
+					COUNT(*)
+				FROM
+					pairedOrgProjects
+				WHERE
+					rank <= '||fraction||'
+				GROUP BY orgUuid1, type
+				ORDER BY 1, 2
+			) q
+			WHERE count > 0
+			GROUP BY type
+			',
+			'VALUES
+				(''Academic''::orgType),
+				(''Medical''),
+				(''Public''),
+				(''Private''),
+				(''Unknown'')'
+		) AS ct (
+			fraction numeric,
+			academic bigint,
+			medical bigint,
+			public bigint,
+			private bigint,
+			unknown bigint
+		);
+	END LOOP;
+
+	RETURN QUERY SELECT * FROM res;
 END; $$ -- FUNCTION
 LANGUAGE plpgsql;
 
