@@ -1237,8 +1237,9 @@ While there are a large number of organisations that have collaborated with
 lower ranked organisations, we still see a sharp increase past the 90th
 percentile. This indicates a similar proportion of organisations have only
 collaborated with the top rank researchers, suggesting that the number of
-projects one organisation has taken part in is an important factor in whether
-another organisation decides to collaborate with them.
+projects one organisation has taken part in is a factor in whether
+another organisation decides to collaborate with them, though not a very
+important one.
 
 #### Amount of funding
 
