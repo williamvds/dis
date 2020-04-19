@@ -5,8 +5,8 @@ INSERT INTO duplicateGtrPeople(
 	duplicateUuid
 )
 SELECT
-	s.personUuid1 AS personUuid,
-	s.personUuid2 AS duplicateUuid
+	LEAST(s.personUuid1, s.personUuid2) AS personUuid,
+	GREATEST(s.personUuid1, s.personUuid2) AS duplicateUuid
 FROM
 	similarGtrPeople s
 	INNER JOIN gtrOrgPeople op1
@@ -24,10 +24,10 @@ WHERE
 	-- Check that the first rec isn't already marked as a duplicate
 	AND NOT EXISTS(SELECT *
 		FROM duplicateGtrPeople
-		WHERE duplicateUuid = s.personUuid1)
-	AND NOT EXISTS(SELECT *
-		FROM duplicateGtrPeople
-		WHERE duplicateUuid = s.personUuid2)
+		WHERE duplicateUuid IN (s.personUuid1, s.personUuid2))
+GROUP BY
+	LEAST(   s.personUuid1, s.personUuid2),
+	GREATEST(s.personUuid1, s.personUuid2)
 ON CONFLICT (duplicateUuid) DO NOTHING;
 
 INSERT INTO people(
@@ -37,17 +37,16 @@ INSERT INTO people(
 	otherNames
 )
 SELECT
-DISTINCT ON (personUuid)
-	p1.personUuid                          AS personUuid,
-	COALESCE(p1.firstName,  p2.firstName)  AS firstName,
-	COALESCE(p1.surname,    p2.surname)    AS surname,
-	COALESCE(p1.otherNames, p2.otherNames) AS otherNames
+	LEAST(p1.personUuid, d.personUuid, d.duplicateUuid) AS personUuid,
+	MERGE(firstName)                                    AS firstName,
+	MERGE(surname)                                      AS surname,
+	MERGE(otherNames)                                   AS otherNames
 FROM
 	gtrPeople p1
-	LEFT OUTER JOIN duplicateGtrPeople s
-		USING (personUuid)
-	LEFT OUTER JOIN gtrPeople p2
-		ON p2.personUuid = s.duplicateUuid
+	LEFT OUTER JOIN duplicateGtrPeople d
+		ON p1.personUuid IN (d.personUuid, d.duplicateUuid)
+GROUP BY
+	LEAST(p1.personUuid, d.personUuid, d.duplicateUuid)
 ON CONFLICT (gtrPersonUuid) DO UPDATE SET
 	firstName  = excluded.firstName,
 	surname    = excluded.surname,

@@ -463,3 +463,16 @@ BEGIN
 	));
 END; $$ -- FUNCTION
 LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION CoalesceAll(state anyelement, new anyelement)
+RETURNS anyelement
+AS $$
+BEGIN
+	RETURN COALESCE(state, new);
+END; $$ --FUNCTION
+LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE AGGREGATE Merge(anyelement) (
+	sfunc = CoalesceAll,
+	stype = anyelement
+);

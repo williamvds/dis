@@ -15,8 +15,8 @@ INSERT INTO duplicateGtrOrgs(
 	duplicateUuid
 )
 SELECT
-	o1.orgUuid AS orgUuid,
-	o2.orgUuid AS duplicateUuid
+	LEAST(o1.orgUuid, o2.orgUuid) AS orgUuid,
+	GREATEST(o1.orgUuid, o2.orgUuid) AS duplicateUuid
 FROM
 	similarGtrOrgs s
 	INNER JOIN gtrOrgs o1
@@ -32,14 +32,13 @@ WHERE
 	-- Check that the first rec isn't already marked as a duplicate
 	AND NOT EXISTS(SELECT *
 		FROM duplicateGtrOrgs
-		WHERE duplicateUuid = o1.orgUuid)
-	AND NOT EXISTS(SELECT *
-		FROM duplicateGtrOrgs
-		WHERE duplicateUuid = o2.orgUuid)
+		WHERE duplicateUuid IN (o1.orgUuid, o2.orgUuid))
 	AND NOT EXISTS(SELECT *
 		FROM junkGtrOrgs
 		WHERE orgUuid IN (o1.orgUuid, o2.orgUuid))
-ORDER BY o1.recorded DESC
+GROUP BY
+	LEAST(   o1.orgUuid, o2.orgUuid),
+	GREATEST(o1.orgUuid, o2.orgUuid)
 ON CONFLICT (duplicateUuid) DO NOTHING;
 
 INSERT INTO orgs(
@@ -57,28 +56,28 @@ INSERT INTO orgs(
 )
 SELECT
 DISTINCT ON (orgUuid)
-	o1.orgUuid                                          AS orgUuid,
-	COALESCE(o1.name,                      o2.name)     AS name,
-	COALESCE(o1.address1,                  o2.address1) AS address1,
-	COALESCE(o1.address2,                  o2.address2) AS address2,
-	COALESCE(o1.address3,                  o2.address3) AS address3,
-	COALESCE(o1.address4,                  o2.address4) AS address4,
-	COALESCE(o1.address5,                  o2.address5) AS address5,
-	COALESCE(o1.postCode,                  o2.postCode) AS postCode,
-	COALESCE(o1.city,                      o2.city)     AS city,
-	COALESCE(NULLIF(o1.region, 'Unknown'), o2.region,
-		'Unknown')                                      AS region,
-	COALESCE(o1.country,                   o2.country)  AS country
+	LEAST(o.orgUuid, d.orgUuid, d.duplicateUuid) AS orgUuid,
+	MERGE(name)                                  AS name,
+	MERGE(address1)                              AS address1,
+	MERGE(address2)                              AS address2,
+	MERGE(address3)                              AS address3,
+	MERGE(address4)                              AS address4,
+	MERGE(address5)                              AS address5,
+	MERGE(postCode)                              AS postCode,
+	MERGE(city)                                  AS city,
+	COALESCE(MERGE(NULLIF(region, 'Unknown')),
+		'Unknown')                               AS region,
+	MERGE(country)                               AS country
 FROM
-	gtrOrgs o1
-	LEFT OUTER JOIN duplicateGtrOrgs s
-		USING (orgUuid)
-	LEFT OUTER JOIN gtrOrgs o2
-		ON s.duplicateUuid = o2.orgUuid
+	gtrOrgs o
+	LEFT OUTER JOIN duplicateGtrOrgs d
+		ON o.orgUuid IN (d.orgUuid, d.duplicateUuid)
 WHERE
 	NOT EXISTS(SELECT *
 		FROM junkGtrOrgs
-		WHERE orgUuid = o1.orgUuid)
+		WHERE orgUuid IN (o.orgUuid, d.orgUuid, d.duplicateUuid))
+GROUP BY
+	LEAST(o.orgUuid, d.orgUuid, d.duplicateUuid)
 ON CONFLICT (gtrOrgUuid) DO UPDATE SET
 	name     = excluded.name,
 	address1 = excluded.address1,
