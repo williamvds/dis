@@ -1060,6 +1060,42 @@ topics of projects they have been involved in.
 
 ## Visualisations
 
+I used [Gephi](https://gephi.org), a graph analysis tool, to plot the network of
+organisations based in the East Midlands region or Nottingham.  
+Organisations were selected if they had 'East Midlands' specified as their
+region, or their postcode started with 'NG', or their address contained
+Nottingham(shire).
+
+Data was exported from the database using [scripts/graphEastMidlands.sql], then
+imported into Gephi through the [import
+spreadsheet](https://github.com/gephi/gephi/wiki/Import-CSV-Data) wizard.
+This includes organisation records (used as the nodes) and projects that pairs
+of those organisations were both involved in (used as the edges).
+Organisation records were inspected for duplicates by sorting by name, and some
+were manually merged within Gephi.  
+In order to make the network explorable through different periods of time, the
+start and end date of projects were merged to create the interval during which
+the edges apply.
+
+Edges were filtered to projects that were active within the years 2002-2008,
+then Yifan Yu's propertional graph layout algorithm (@yhugraph) was applied.
+This layout algorithm clusters related nodes while minimising the amount of edge
+crossing. Clustering is a result of edges causing connected vertices to attract
+one another while all vertices repel each other.  
+Nodes were scaled by their (unfiltered) total number of connections, and
+coloured according to their type:
+
+- Purple: Academic
+- Blue: Private
+- Green: Medical
+- Gray: Unknown
+
+Nodes with no connections  were removed, minor repositioning was performed
+to make the graph visualisation more compact, and some nodes were adjusted
+to fix overlapping labels.
+
+The resulting visualisation can be found in figure~\ref{fig:midlands2002_2008}.
+
 ## Analysis
 
 ### Identifying topics
@@ -1454,6 +1490,12 @@ Attempt to categorise individual technologies based on data available
 ## stats.sql
 \inputminted{postgresql}{scripts/stats.sql}
 
+## mergeGtrOrgs.sql
+\inputminted{plpgsql}{scripts/mergeGtrOrgs.sql}
+
+## mergeGtrPeople.sql
+\inputminted{plpgsql}{scripts/mergeGtrPeople.sql}
+
 \newpage
 
 \begin{sidewaysfigure}
@@ -1473,8 +1515,11 @@ Attempt to categorise individual technologies based on data available
 	\label{fig:initialErd}
 \end{sidewaysfigure}
 
-## mergeGtrOrgs.sql
-\inputminted{plpgsql}{scripts/mergeGtrOrgs.sql}
-
-## mergeGtrPeople.sql
-\inputminted{plpgsql}{scripts/mergeGtrPeople.sql}
+\begin{sidewaysfigure}
+	\subsection{East Midlands/Nottingham network (2002-2008)}
+	\centering
+	\includegraphics[width=0.9\textwidth]{midlands2002-2008}
+	\caption{Funding network for organisations in the East Midlands within the
+		years 2002 to 2008}
+	\label{fig:midlands2002_2008}
+\end{sidewaysfigure}
