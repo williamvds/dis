@@ -1447,10 +1447,20 @@ Attempt to categorise individual technologies based on data available
 
 \newpage
 
-# Work plan
-\input{gantt}
+# Summary and Reflections
 
-\newpage 
+## Project Management
+
+\begin{figure}[H]
+	\centering
+	\input{gantt}
+	\caption{Gannt chart visualising the work plan for the project.}
+	\label{fig:workPlan}
+\end{figure}
+
+## Contributions and Reflections
+
+\newpage
 
 # Bibliography
 
