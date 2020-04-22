@@ -510,11 +510,14 @@ included:
   ```
   I found that each unique identifier used within a for loop resulted in greater
   memory usage.  
-  My solution was to simply use a single variable for these sub-loops,
-  sacrificing some clarity in the meaning of the loop variables for more
-  efficient use of memory. The project importing procedure remains the most
-  memory-intensive, but the PostgreSQL process peaks at just under 6 gigabytes
-  during its execution, which is feasible for most computers to handle.  
+  My solution was to simply use a single variable for these sub-loops, when
+  necessary, sacrificing some clarity in the meaning of the loop variables for
+  more efficient use of memory.
+  Most of the queries were instead adjusted to use a SELECT query within the
+  [INSERT statement](https://www.postgresql.org/docs/current/sql-insert.html), eliminating the need for temporary variables.  
+  The project importing procedure remains the most memory-intensive, but the
+  PostgreSQL process peaks at just under 6 gigabytes during its execution, which
+  is feasible for most computers to handle.  
   Memory usage could be further reduced by using temporary tables for
   sub-records, and additional research into minimising memory usage in
   PostgreSQL procedures.
