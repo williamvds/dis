@@ -4,13 +4,39 @@ UPDATE orgs
 SET type = 'Academic'
 WHERE name ~* '\y(uni(versity|\.?)|college|academ(y|ic))\y';
 
-UPDATE orgs
+WITH matches AS (
+	SELECT
+		COALESCE(d.orgUuid, o.orgUuid) AS orgUuid
+	FROM
+		gtrOrgs o
+		LEFT OUTER JOIN duplicateGtrOrgs d
+			ON o.orgUuid IN (d.orgUuid, d.duplicateUuid)
+	WHERE
+		name ~* '\yhospitals?\y'
+)
+UPDATE orgs o
 SET type = 'Medical'
-WHERE name ~* '\yhospitals?\y';
+WHERE EXISTS(
+	SELECT FROM matches m
+	WHERE m.orgUuid = o.gtrOrgUuid
+);
 
-UPDATE orgs
+WITH matches AS (
+	SELECT
+		COALESCE(d.orgUuid, o.orgUuid) AS orgUuid
+	FROM
+		gtrOrgs o
+		LEFT OUTER JOIN duplicateGtrOrgs d
+			ON o.orgUuid IN (d.orgUuid, d.duplicateUuid)
+	WHERE
+		name ~* '\y((ltd|llc|plc|gmbh|inc|corp|co)\.?|limited|enterprises?|corporation|company)\y'
+)
+UPDATE orgs o
 SET type = 'Private'
-WHERE name ~* '\y((ltd|llc|plc|gmbh|inc|corp|co)\.?|limited|enterprises?|corporation|company)\y';
+WHERE EXISTS(
+	SELECT FROM matches m
+	WHERE m.orgUuid = o.gtrOrgUuid
+);
 
 UPDATE orgs
 SET type = 'Public'
