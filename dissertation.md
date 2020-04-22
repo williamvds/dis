@@ -217,8 +217,6 @@ the Gateway to Research database from UK Research and Innovation.
 This dataset will be combined with data on businesses from The Decision Project,
 which provides information such as financial performance.
 
-<!-- TODO: check truth of details TDP provides -->
-
 These datasets will be aggregated, normalised, and linked so that all available
 information can be used during the project's research. This will involve
 translating the schema of these datasets into a single schema, which will be
@@ -335,9 +333,8 @@ All aggregated data will be kept in the database so that it can be used
 throughout the project. As a result some information may be duplicated, as
 records can be duplicated within and between data sources.  
 In order to differentiate between the sources of data, tables containing data
-from the Gateway to Research database are prefixed with 'gtr', while tables with
-data from TDP are prefixed with 'tdp'. All other tables contain data formed from
-this project.
+from the Gateway to Research database are prefixed with 'gtr'.
+All other tables contain data formed from this project.
 
 The design for data from the Gateway to Research database is based partially on
 the contents of the GtR API manual [@gtrapi2manual], which explains the contents
@@ -347,8 +344,6 @@ XML schema of records and some exported records were visually inspected to
 identify how best to normalise each type of record. For example, the XML schema
 for individuals is available [through the REST
 API](https://gtr.ukri.org/gtr/api/person).  
-
-<!-- TODO: mention TDP data -->
 
 The Entity Relationship Diagram in figure \ref{fig:erd} describes the tables
 that exist in the database schema, including their fields and relationships to
@@ -462,8 +457,6 @@ data in that manner that was needed.
 The source code of the main download program is provided in the appendix section
 [ukriDownload], and the auxiliary combing script in [mergeXML].
 
-<!-- TODO: Mention TDP data -->
-
 ## Importing data
 
 The final database design is visualised figure \ref{fig:erd}, and
@@ -472,10 +465,8 @@ the schema is in a SQL file provided in appendix section [setup.sql].
 
 Adjustments were made to the original design (shown in figure
 \ref{fig:initialErd}) after more in-depth analysis of the contents of the GtR
-database and data provided from TDP. This resulted in additional tables being
+database. This resulted in additional tables being
 created, such as `gtrTopics`, `gtrProjectSubjects`, and `gtrDisseminations`.
-The `tdpOrgs` table in the diagram was also extended to contain all fields
-provided in the dataset from TDP.
 
 PostgreSQL has good support for importing structured XML data, though the
 structure of the XML records must be mapped to the relational and normalised
