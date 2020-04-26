@@ -1085,6 +1085,8 @@ then Yifan Yu's propertional graph layout algorithm (@yhugraph) was applied.
 This layout algorithm clusters related nodes while minimising the amount of edge
 crossing. Clustering is a result of edges causing connected vertices to attract
 one another while all vertices repel each other.  
+Edges were scaled according to the amount spent on projects between those
+organisations.
 Nodes were scaled by their (unfiltered) total number of connections, and
 coloured according to their type:
 
@@ -1097,7 +1099,29 @@ Nodes with no connections  were removed, minor repositioning was performed
 to make the graph visualisation more compact, and some nodes were adjusted
 to fix overlapping labels.
 
-The resulting visualisation can be found in figure~\ref{fig:midlands2002_2008}.
+The resulting visualisation can be found in figure \ref{fig:midlands2002_2008}.
+
+The network shows academic organisations being involved in the majority of
+projects in this period & area, having many connections to other organisations
+through projects. Among these are the University of Nottingham, Loughborough
+University, and Loughborough College.  
+Medical organisations are also heavily involved in research, including the
+University Hospitals of Nottingham and Leicester. These have formed large hubs
+of connected organisations, showing the amount of research and variety of
+organisations they are involved in.  
+A few private and other classes of organisations stand out including [PERA
+Innovation](https://www.perainternational.com/about), a research association for
+the manufacturing sector, and [Experian](https://www.experian.com), a credit
+reporting company. Both have a significant number of connections, and spend a
+lot on research.
+
+The vast majority of organisations are connected to a single contiguous graph,
+but there are a few outliers that reside in their own disjoint networks, shown
+in the bottom left of the graph. These include [Sun
+Chemical](https://www.sunchemical.com) who produce "printing inks, coatings and
+supplies".  
+This suggests these organisations are in niche industries or involved in
+research that does not benefit most organisations.
 
 ## Analysis
 
