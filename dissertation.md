@@ -1151,7 +1151,7 @@ Analyse key factors that affect likelihood of collaboration
 - pedigree of organisation (cost or amount of previous research)
 -->
 
-#### Number of projects
+#### Amount of research
 
 Organisations being involved in more publically-funded projects could imply that
 they are subject experts, and perform higher-quality research than other
