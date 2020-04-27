@@ -1074,9 +1074,10 @@ Through research I also found that it includes several features that enable
 network analysis and visualisation, the possibilities of which I was keen to
 apply to explore.  
 Organisations were selected if they had 'East Midlands' specified as their
-region, or their postcode started with 'NG', or their address contained
-Nottingham(shire).
+region.
 
+In the graph, nodes represent organisations, and edges represent projects that
+both organisations were involved in.  
 Data was exported from the database using [scripts/graphEastMidlands.sql], then
 imported into Gephi through the [import
 spreadsheet](https://github.com/gephi/gephi/wiki/Import-CSV-Data) wizard.
