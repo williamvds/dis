@@ -1,4 +1,4 @@
-CREATE TEMP TABLE IF NOT EXISTS orgsMidlandsNodes AS
+CREATE TEMP TABLE IF NOT EXISTS nodes AS
 SELECT
 	gtrOrgUuid AS id,
 	name AS label,
@@ -15,7 +15,7 @@ WHERE
 	OR region = 'East Midlands'
 	OR postcode ~* '^ng';
 
-\copy (SELECT * FROM orgsMidlandsNodes) TO data/graphOrgsMidlandsNodes.csv (FORMAT CSV, HEADER)
+\copy (SELECT * FROM nodes) TO data/eastMidlandsGraphGephiNodes.csv (FORMAT CSV, HEADER)
 
 CREATE TEMP TABLE IF NOT EXISTS orgsMidlandsEdges AS
 SELECT
@@ -30,7 +30,7 @@ SELECT
 	p.endDate AS endDate
 FROM
 	-- First organisation
-	orgsMidlandsNodes o1
+	nodes o1
 	LEFT OUTER JOIN duplicateGtrOrgs d1
 		ON d1.orgUuid = o1.gtrOrgUuid
 	INNER JOIN gtrProjectOrgs po1
@@ -42,11 +42,11 @@ FROM
 		AND po2.projectUuid = po1.projectUuid
 	LEFT OUTER JOIN duplicateGtrOrgs d2
 		ON po2.orgUuid IN (d2.orgUuid, d2.duplicateUuid)
-	INNER JOIN orgsMidlandsNodes o2
+	INNER JOIN nodes o2
 		ON o2.gtrOrgUuid IN (d2.orgUuid, po2.orgUuid)
 
 	-- Shared project
 	INNER JOIN gtrProjects p
 		ON p.projectUuid = po1.projectUuid;
 
-\copy (SELECT * FROM orgsMidlandsEdges) TO data/graphOrgsMidlandsEdges.csv (FORMAT CSV, HEADER)
+\copy (SELECT * FROM edges) TO data/eastMidlandsGraphGephiEdges.csv (FORMAT CSV, HEADER)

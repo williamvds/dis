@@ -1079,8 +1079,8 @@ region.
 
 In the graph, nodes represent organisations, and edges represent projects that
 both organisations were involved in.  
-Data was exported from the database using [scripts/graphEastMidlands.sql], then
-imported into Gephi through the [import
+Data was exported from the database using [scripts/eastMidlandsGraphGephi.sql],
+then imported into Gephi through the [import
 spreadsheet](https://github.com/gephi/gephi/wiki/Import-CSV-Data) wizard.
 This includes organisation records (used as the nodes) and projects that pairs
 of those organisations were both involved in (used as the edges).
@@ -1132,6 +1132,13 @@ Chemical](https://www.sunchemical.com) who produce "printing inks, coatings and
 supplies".  
 This suggests these organisations are in niche industries or involved in
 research that does not benefit most organisations.
+
+While Gephi supports importing data directly from a database through queries,
+I encountered difficulties when attempting to use this feature with long queries
+and large amounts of data.  
+I instead opted to create procedures that exported the needed data to Comma
+Separated Values (CSV) files, a common plaintext format, and then imported these
+files manually into Gephi.
 
 ### East Midlands network with NodeXL
 
@@ -1604,6 +1611,9 @@ Attempt to categorise individual technologies based on data available
 
 ## mergeGtrPeople.sql
 \inputminted{plpgsql}{scripts/mergeGtrPeople.sql}
+
+## eastMidlandsGraphGephi.sql
+\inputminted{plpgsql}{scripts/eastMidlandsGraphGephi.sql}
 
 ## eastMidlandsGraphNodeXL.sql
 \inputminted{plpgsql}{scripts/eastMidlandsGraphNodeXL.sql}
