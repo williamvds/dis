@@ -611,11 +611,12 @@ well as storing the outcomes of cleaning: merged records.
 
 ### Eliminating junk records
 
-The first step taken during data cleaning was to identify records of low
-quality, that contain little useful information and/or do not refer to a real
-entity. For example, an [organisation record with the name
+The first step taken during data cleaning was to identify records that contain
+no useful information and/or do not refer to a real entity. For example, an
+[organisation record with the name
 'Unknown'](https://gtr.ukri.org/organisation/39BBE949-0333-428F-864F-C3B196D3D92D)
-is not useful in analysis.
+can't be linked back to a real organisation, limiting how its relationship with
+other entities can be explored.
 
 Initial exploration of the data was undertaken, revealing a number of other
 organisation and person records with the name 'Unknown' (with varying
