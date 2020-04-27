@@ -1063,8 +1063,16 @@ topics of projects they have been involved in.
 
 ## Visualisations
 
+### East Midlands network with Gephi
+
 I used [Gephi](https://gephi.org), a graph analysis tool, to plot the network of
 organisations based in the East Midlands region or Nottingham.  
+This software was chosen as it is free and open source, and so it costs nothing
+to use. Documentation also suggested it was easy to use, which would enable me
+to quickly get to grips with the application in order to use it in this project.
+Through research I also found that it includes several features that enable
+network analysis and visualisation, the possibilities of which I was keen to
+apply to explore.  
 Organisations were selected if they had 'East Midlands' specified as their
 region, or their postcode started with 'NG', or their address contained
 Nottingham(shire).
