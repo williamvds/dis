@@ -1132,6 +1132,68 @@ supplies".
 This suggests these organisations are in niche industries or involved in
 research that does not benefit most organisations.
 
+### East Midlands network with NodeXL
+
+[NodeXL](https://www.smrfoundation.org/nodexl) is an add-on for Microsoft Office
+Excel by the Social Media Research Foundation, originally developed to explore
+and analyse social media networks. It can be used to explore any network,
+however.
+NodeXL was recommended by my supervisor, who had previously used it in her
+research, and kindly provided a training session on using it.  
+As the University provides complimentary access to the Microsoft Office suite,
+and a free version is provided, I decided to try applying it to this project.
+
+Similarly to the Gephi network, I filtered organisations to the East Midlands
+region, so that the network is of a more manageable size. I decided to explore a
+different year range for projects, from 2005 to 2010 instead. As a result, the
+differences in the networks can be explored.
+
+The procedure for exporting this data is provided in
+[eastMidlandsGraphNodeXL.sql].
+
+Nodes were scaled by the number of project connections they had within that time
+period, and edges scaled by how much was spent by either organisation on that
+project.  
+I applied the Fruchterman-Reingold layout algorithm (@fruchterman1991graph),
+which takes into account edges in positioning. By adjusting the configuration of
+the repulsive force to 25.0 and number of iterations to 25, this resulted in
+nodes with greater degrees being positioned towards the centre of the graph, and
+other nodes being placed towards the periphery.  
+The layout algorithm was also configured to position small networks in the
+bottom-left of the graph.  
+Labels were added for nodes with the highest degrees (greater than 13), and some
+other ones close to the centre of the graph. Minor repositioning was performed
+to reduce overlap of these labels.
+
+Nodes were coloured according to their type:
+
+- Dark blue: Academic
+- Red: Private
+- Light green: Medical
+- Dark green: Unknown
+- Light blue: Public
+
+The resulting visualisation can be found in figure \ref{fig:midlands2005_2010}.
+
+Academic and Medical institutions are shown towards the centre of the graph and
+with high degrees, indicating they are heavily involved in collaborative
+research, as one might expect. This pattern is also visible in the 2002-2008
+network. This graph also shows that most academic organisations have higher
+degrees than most, hence are involved in more collaboration.  
+With the exception of PERA Innovation, all the organisations mentioned in the
+analysis of the 2002-2008 network also appear as nodes with high degree in this
+new graph. This suggests the remaining organisations have maintained the large
+amount of research they perform, whereas PERA Innovation is less involved in
+publically-funded research within the East Midlands region.
+
+Some particularly notable edges appear near the centre of the graph and travel
+downwards to the bottom.  
+These both represent a project that a significant amount of money was invested
+into to [develop hydrogen fuel cell
+systems](https://gtr.ukri.org/projects?ref=113057), led by [Intelligent Energy
+Limited](https://www.intelligent-energy.com) and partnered with Frost
+Electronics Limited.
+
 ## Analysis
 
 ### Identifying topics
@@ -1542,6 +1604,9 @@ Attempt to categorise individual technologies based on data available
 ## mergeGtrPeople.sql
 \inputminted{plpgsql}{scripts/mergeGtrPeople.sql}
 
+## eastMidlandsGraphNodeXL.sql
+\inputminted{plpgsql}{scripts/eastMidlandsGraphNodeXL.sql}
+
 \newpage
 
 \begin{sidewaysfigure}
@@ -1562,10 +1627,19 @@ Attempt to categorise individual technologies based on data available
 \end{sidewaysfigure}
 
 \begin{sidewaysfigure}
-	\subsection{East Midlands/Nottingham network (2002-2008)}
+	\subsection{East Midlands network (2002-2008)}
 	\centering
 	\includegraphics[width=0.9\textwidth]{midlands2002-2008}
 	\caption{Funding network for organisations in the East Midlands within the
 		years 2002 to 2008}
 	\label{fig:midlands2002_2008}
+\end{sidewaysfigure}
+
+\begin{sidewaysfigure}
+	\subsection{East Midlands network (2005-2010)}
+	\centering
+	\includegraphics[width=0.9\textwidth]{midlands2005-2010}
+	\caption{Funding network for organisations in the East Midlands within the
+		years 2005 to 2010}
+	\label{fig:midlands2005_2010}
 \end{sidewaysfigure}
