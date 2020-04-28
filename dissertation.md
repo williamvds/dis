@@ -351,23 +351,6 @@ other tables.
 
 \newpage
 
-## Visualisations
-
-Some visualisations are in the process of being designed, which will display the
-results of analysis.  
-The following figure visualises the businesses that have invested the most in a
-specific research topic:
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.7\textwidth]{pics/visSubjectPlayers}
-	\caption{A visualisation of the companies that invest the most in a specific
-	research category}
-	\label{fig:visSubjectPlayers}
-\end{figure}
-
-\newpage
-
 # Implementation
 
 ## Aggregating data
