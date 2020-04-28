@@ -598,10 +598,17 @@ and that records contain the information that is needed for them to be analysed.
 The use of low quality data negatively impacts the results of its analysis,
 resulting in less useful outcomes (@rahm2000data).
 
-The Gateway to Research database contains information entered by researchers and
-other individuals involved in the grant funding process. As a result, human
-error can result in erroneous data being entered, or duplicate records being
-created for entities that already have a record in the database.
+The Gateway to Research database is a collection of databases maintained by
+subsidiaries of UKRI, as well as UKRI's own database. It thus contains
+information entered by researchers and other individuals involved in the grant
+funding process.  
+As a result, human error can result in erroneous data being
+entered, or duplicate records being created for entities that already have a
+record in the database. These problems are classified as 'single-source'
+problems, as they occur even a single database is being considered.  
+The introduction of multiple databases then introduce 'multi-source problems',
+such as different encodings for the roles of organisations, or different
+monetary systems being used for currency values.
 
 In order to make the development and further steps of this project simpler, the
 processes undertaken to clean data avoided removing or modifying any data
@@ -615,8 +622,10 @@ The first step taken during data cleaning was to identify records that contain
 no useful information and/or do not refer to a real entity. For example, an
 [organisation record with the name
 'Unknown'](https://gtr.ukri.org/organisation/39BBE949-0333-428F-864F-C3B196D3D92D)
-can't be linked back to a real organisation, limiting how its relationship with
-other entities can be explored.
+doesn't represent a real organisation, limiting how its relationship with
+other entities can be explored. Such issues exist at the _record_ scope of
+problems (as categorised by Rahm), due to this problem applying to the record as
+a whole.
 
 Initial exploration of the data was undertaken, revealing a number of other
 organisation and person records with the name 'Unknown' (with varying
