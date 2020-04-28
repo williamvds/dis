@@ -327,8 +327,6 @@ piece of information is stored in an individual field. This minimises data
 duplication - particularly helpful when handling large databases such as in this
 project - as well as enabling analysis of individual components of records.
 
-<!-- TODO: Cite benefits of normalisation? -->
-
 All aggregated data will be kept in the database so that it can be used
 throughout the project. As a result some information may be duplicated, as
 records can be duplicated within and between data sources.  
@@ -730,9 +728,8 @@ duplicates using the `COALESCE` function, which will take the first non-null
 value. Thus, records in the `orgs` table will contain as much data as the
 Gateway to Research database contains for each individual entity.
 
-It is common practice to normalise data stored within a relational database
-system. This involves splitting data into its minimal atomic components, and
-enforcing well-structured relations between entities stored in the database.
+Data normalisation involves splitting data into its minimal atomic components,
+and enforcing well-structured relations between entities stored in the database.
 Doing so provides confidence that the stored data is free of anomalies and
 always correct. One part of this process involves eliminating fields whose
 values can be calculated from the values of other fields - if the record is
@@ -741,7 +738,11 @@ being stored (@lee1995justifying).
 Storing similarity metrics for pairs of records breaches this principle.
 However, I believe this decision is justified for several reasons:
 
-1. It takes a significant amount of time to calculate these metrics:  
+1. Original data needs to be maintained so that the changes made during
+   data cleaning can be identified and statistics can be reported within this
+   report.
+
+2. It takes a significant amount of time to calculate these metrics:  
    As of the date of data aggregation, the Gateway to Research database
    contained just under 48,000 records of organisations, and just over 82,000
    records of people. Performing unique pairwise comparisons for each type of
@@ -753,9 +754,9 @@ However, I believe this decision is justified for several reasons:
    inconvenience during the development of the project, as these values are
    required regularly during de-duplication and analysis.  
    The similarity tables instead act as a cache that can be referred back to
-   when needed to speed processes throughout the project.
+   when needed to speed up processes throughout the project.
 
-2. The database is not regularly being updated:  
+3. The database is not regularly being updated:  
    Data from Gateway to Research was exported only twice during the project, and
    the project does not aim to keep up-to-date with the current state of the
    Gateway to Research database, so it is appropriate to calculate metrics once
