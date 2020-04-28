@@ -675,6 +675,44 @@ between these entities cannot be analysed.
 For these reasons, I decided to add organisation records with no linked projects
 to the junk records collection.
 
+### Organisation roles
+
+Through visual inspection, the enumerations that specify an organisation's role
+in a project (in the `gtrProjectOrgs` table) appeared to some duplicates. This
+is likely a result of the merging of several databases without considering
+the meanings of these enumerations.  
+In order to solve this, I created a new database type, `gtrOrgRole`, and added a
+utility function that mapped the enumerations within the GtR database to this
+new type:
+
+| GtR enumeration    | `gtrOrgRole` mapping      |
+|--------------------|---------------------------|
+| `LEAD_PARTICIPANT` | `Lead`                    |
+| `PARTICIPANT`      | `Participant`             |
+| `LEAD_ORG`         | `Lead`                    |
+| `COLLAB_ORG`       | `Collaborating`           |
+| `FELLOW_ORG`       | `Fellow`                  |
+| `PP_ORG`           | `Project Partner`         |
+| `FUNDER`           | `Funder`                  |
+| `COFUND_ORG`       | `Co-Funder`               |
+| `PARTICIPANT_ORG`  | `Participant`             |
+| `STUDENT_PP_ORG`   | `Student Project Partner` |
+
+These decisions were made by investigating the GtR API documentation, manually
+gauging the semantics of each enumeration, and determining which refer to the
+same role.  
+For example, the first two enumerations, `LEAD_PARTICIPANT` and `PARTICIPANT`
+are specified to only be used by the subsidiary Innovate UK (@gtrdatadict).
+Both `LEAD_PARTICIPANT` and `LEAD_ORG` both refer to "[an] organisation
+receiving project funding which is accountable for ensuring that the planned
+outcomes for the project are achieved...". Hence, these enumerations can be
+merged into a single role.
+The `PARTICIPANT` enumeration is undocumented, but since it is named almost
+identically to `PARTICIPANT_ORG`, I decided that this pair were semantically
+identical and thus mapped them to the same value.
+
+Mapping is performed by `ParseOrgRole` in [importGtrProjects.sql].
+
 ## Merging duplicate records
 
 As explored by (@winkler2006overview) there are many existing methods for
