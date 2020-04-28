@@ -684,6 +684,9 @@ between these entities cannot be analysed.
 For these reasons, I decided to add organisation records with no linked projects
 to the junk records collection.
 
+As a result, 5213 of 47822 (10.9%) organisation records were marked as junk
+records.
+
 ### Organisation roles
 
 Through visual inspection, the enumerations that specify an organisation's role
@@ -1041,6 +1044,9 @@ resulting records in the `orgs` table. The `COALESCE` function on each duplicate
 pair's fields so that the resulting record will take all information available
 on a single entity. 
 
+As a result, 3091 of 47822 (6.5%) organisation records were marked as
+duplicates.
+
 #### People
 
 I identified that 617 of 14456 (4.3%) of similar person records shared the
@@ -1071,11 +1077,15 @@ resulting records in the `people` table. The `COALESCE` function on each
 duplicate pair's fields so that the resulting record will take all information
 available on a single entity. 
 
+As a result, 499 of 82015 (0.61%) of records on people were marked as
+duplicates.
+
 ### Summary
 
-Name trigram similarity is a good heuristic for detecting duplicate
+Name trigram similarity is an effective heuristic for detecting duplicate
 organisations, as these tend to use more unique names to distinguish themselves.
-The same is not true of people, due to the popularity of names.
+The same is not true of people, due to the popularity and wide re-use of names
+within populations.
 
 Using name comparison is more effective when common variations of the same words
 or names are substituted for a single variation before comparison. However, this
