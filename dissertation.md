@@ -1245,15 +1245,6 @@ Electronics Limited.
 
 ## Analysis
 
-### Identifying topics
-
-<!--
-Analyse subject-topic hierarchy
-Try to break down combined keywords
-Search abstracts for keywords
-Group keywords into hierarchy or clusters
--->
-
 ### Important factors in collaboration
 
 <!--
@@ -1575,23 +1566,11 @@ theory that, when an organisation is deciding whether to collaborate with
 another, the total research funding that other organisation has received is a
 factor.
 
-### Predicting hype cycle
-
-<!--
-Use identified topics
-Explore popularity of keywords over time
--->
-
-### Evaluating readiness level
-
-<!--
-Explore concept of technology readiness level
-Attempt to categorise individual technologies based on data available
--->
-
 \newpage
 
 # Summary and Reflections
+
+## Contributions and Reflections
 
 ## Project Management
 
@@ -1601,8 +1580,6 @@ Attempt to categorise individual technologies based on data available
 	\caption{Gannt chart visualising the work plan for the project.}
 	\label{fig:workPlan}
 \end{figure}
-
-## Contributions and Reflections
 
 \newpage
 
