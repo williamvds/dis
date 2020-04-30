@@ -1176,6 +1176,53 @@ I instead opted to create procedures that exported the needed data to Comma
 Separated Values (CSV) files, a common plaintext format, and then imported these
 files manually into Gephi.
 
+Gephi also allows some graph properties to be analysed, including the degree
+distribution of nodes and (weighted) clustering coefficient.
+
+The degree distribution shown in figure \ref{fig:midlands2002_2008Degree} is
+similar to that of the network as a whole (see [Amount of research]), with the
+vast majority of nodes (i.e. organisations) having a low number of connections,
+indicating that they are involved in only a few collaborations.  
+Frequencies drop dramatically past degree 10, and very few organisations have
+the highest degrees, and these are particularly sparse within the distribution.
+This supports the expectation that there are a few organisations that make up
+the vast majority of research and collaboration, and that most are only involved
+in a few projects.  
+As the distribution is similar to that of the database as a whole, this suggests
+that publically-funded research in the East Midlands region does not stand out
+significantly from other regions in terms of amount of research and its
+distribution.
+
+The weighted degree distribution (where each edge is multiplied by its weight)
+for the graph is shown in figure \ref{fig:midlands2002_2008WeightedDegree},
+where the weight is the cost of the project between the two organisations.  
+A similar pattern is shown to the degree distribution; lower values have
+significantly greater frequencies, and higher costs becoming rarer as indicated
+by the sparsity at higher values.  
+
+The clustering coefficient is a measure of "the degree to which nodes tend to
+cluster together" (@opsahl2009clustering), originally attempted by
+@luce1949method.  
+When considering a single node, its coefficient indicates how close that node's
+neighbours are to being a fully-connected graph: a lower value indicates less
+connection, higher indicates more. Gephi calculates this for triplets (referred
+to as 'triangles') of nodes in the graph.  
+Gephi was used to calculate the distribution of clustering coefficients for all
+nodes in the network, with the results shown in figure
+\ref{fig:midlands2002_2008Clustering}.
+We can see that a large number of
+triangles have a clustering coefficient of 0, and slightly fewer have a
+coefficient of 1. This indicates that there are a similar number of
+triplets of organisations that have collaborated with each other, as there are
+those that have never collaborated with each other.
+The remaining node triangles are distributed between these extremes, with
+coefficients higher than 0.5 being slightly more frequent.  
+These results show that most of the network is highly connected, suggesting
+there are many organisations in the East Midlands that engage in research with
+many other organisations in this region. There is also a significant portion
+that does not: these organisations are likely involved in few projects with few
+collaborators.
+
 ### East Midlands network with NodeXL
 
 [NodeXL](https://www.smrfoundation.org/nodexl) is an add-on for Microsoft Office
@@ -1697,6 +1744,34 @@ factor.
 		years 2002 to 2008}
 	\label{fig:midlands2002_2008}
 \end{sidewaysfigure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\textwidth]{midlands2002-2008/degree.png}
+	\caption{Degree distribution of the East Midlands funding network
+		(2002-2008), where nodes are organisations and edges are projects
+		those organisations are collaborating on.}
+	\label{fig:midlands2002_2008Degree}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\textwidth]{midlands2002-2008/weightedDegree.png}
+	\caption{Weighted degree distribution of the East Midlands funding
+	network (2002-2008), where nodes are organisations, edges are projects
+	those organisations are collaborating on, and the weight of edges is the
+	total spent on the project between both organisations.}
+	\label{fig:midlands2002_2008WeightedDegree}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\textwidth]{midlands2002-2008/clustering.png}
+	\caption{Clustering coefficient distribution of the East Midlands funding
+	network (2002-2008), where nodes are organisations and edges are projects
+	those organisations are collaborating on.}
+	\label{fig:midlands2002_2008Clustering}
+\end{figure}
 
 \begin{sidewaysfigure}
 	\subsection{East Midlands network (2005-2010)}
