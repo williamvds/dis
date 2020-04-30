@@ -31,7 +31,10 @@ header-includes:
 			breaklines=true
 		}
 	- \pgfplotsset{
-			every axis/.append style={line width=1pt}
+			every axis/.append style={
+				line width=1pt,
+				minor tick num=4,
+			},
 		}
 geometry: a4paper,margin=2cm
 fontsize: 12pt
@@ -1284,8 +1287,8 @@ exponential past the 90th percentile:
 		] {data/orgProjectPercentiles.csv};
 	\end{axis}
 	\end{tikzpicture}
-	\caption{Percentiles for the number of projects organisations are involved
-		in.
+	\caption{Percentiles for the number of projects an organisation is involved
+		in, across the entire UKRI database.
 		Generated with \texttt{OrgProjectPercentiles} in \nameref{stats.sql}}
 	\label{fig:orgProjectPercentiles}
 \end{figure}
@@ -1298,9 +1301,11 @@ similar pattern: the vast majority are involved with only one or two projects:
 	\centering
 	\begin{tikzpicture}
 	\begin{axis}[
-		xlabel=Project involvement percentile,
-		ylabel=Organisations,
+		xlabel=Organisation percentile by number of projects involved in,
+		ylabel=No. of organisations (cum.),
 		ymin=0,
+		y label style={at={(axis description cs:-0.1,.5)}},
+		scaled y ticks = false,
 		mark=none,
 		stack plots=y,
 		area style,
@@ -1309,6 +1314,7 @@ similar pattern: the vast majority are involved with only one or two projects:
 		},
 		legend pos=outer north east,
 	]
+		\draw [red] (axis cs:40,0) -- (axis cs:40,50000);
 		\addplot+ table [
 			x=percentile,
 			y=unknown,
@@ -1336,8 +1342,11 @@ similar pattern: the vast majority are involved with only one or two projects:
 		\addlegendentry{Public}
 	\end{axis}
 	\end{tikzpicture}
-	\caption{Percentile distribution of organisations by total number of
-		projects involved in.
+	\caption{Cumulative distribution of all organisations in the UKRI database
+		by percentile, ranked by the total number of projects they are involved in.
+		The number of organisations are broken down by their type.
+		E.g. the red vertical line indicates just under 20,000 organisations are
+		ranked at the 40th percentile or below.
 		Generated with \texttt{OrgProjectPercentileDist} in
 		\nameref{stats.sql}}
 	\label{fig:orgProjectPercentileDist}
@@ -1352,9 +1361,11 @@ collaborated with organisations of lower percentile ranks:
 	\centering
 	\begin{tikzpicture}
 	\begin{axis}[
-		xlabel=Project involvement percentile,
-		ylabel=Organisations,
+		xlabel=Organisation percentile by number of projects involved in,
+		ylabel=No. of orgs. collaborated with (cum.),
 		ymin=0,
+		y label style={at={(axis description cs:-0.1,.5)}},
+		scaled y ticks = false,
 		mark=none,
 		stack plots=y,
 		area style,
@@ -1363,6 +1374,7 @@ collaborated with organisations of lower percentile ranks:
 		},
 		legend pos=outer north east,
 	]
+		\draw [red] (axis cs:60,0) -- (axis cs:60,50000);
 		\addplot+ table [
 			x=percentile,
 			y=unknown,
@@ -1390,9 +1402,15 @@ collaborated with organisations of lower percentile ranks:
 		\addlegendentry{Public}
 	\end{axis}
 	\end{tikzpicture}
-	\caption{Total number of organisations that have collaborated with at least
-		one other organisation below a certain percentile of total number of
-		projects involved in.
+	\caption{Cumulative distribution of all organisations in the UKRI database,
+		filtered by ones that have collaborated with at least one other
+		organisation at a certain percentile.
+		Organisations are ranked by the total number of projects they are
+		involved in.
+		E.g. the red vertical line indicates that there are just under 30,000
+		organisations that have collaborated with at least one other
+		organisation at or below the 60th percentile, when ranked by the number
+		of projects this organisation has been involved in.
 		Generated with \texttt{OrgProjectPercentileCollab} in
 		\nameref{stats.sql}}
 	\label{fig:orgProjectPercentileCollab}
@@ -1426,14 +1444,16 @@ projects.
 	\centering
 	\begin{tikzpicture}
 	\begin{axis}[
-		xlabel=Percentile,
-		ylabel=Funding (£),
+		xlabel=Percentile of funding,
+		ylabel=Funding (£) (cum.),
+		ytick scale label code/.code={millions},
 		legend style={
 			mark=none,
 			at={(0.5, 1.03)},
 			anchor=south,
-		}
+		},
 	]
+		\draw [red] (axis cs:80,0) -- (axis cs:80,50000);
 		\addplot+ [
 			smooth,
 			mark=none,
@@ -1454,7 +1474,12 @@ projects.
 		\addlegendentry{Organisations}
 	\end{axis}
 	\end{tikzpicture}
-	\caption{Funding percentiles for projects \& organisations.
+	\caption{Percentiles of public funding that organisations have received for
+		the projects the are involved in, as well as the total funding received
+		by projects.
+		E.g. the red line indicates that when ranked by the amount of funding
+		received, the top 20% of both organisations and projects received at
+		least £300,000 in total funding.
 		Generated with \texttt{ProjectFundingPercentiles} and
 		\texttt{OrgFundingPercentiles} in \nameref{stats.sql}}
 	\label{fig:fundingPercentiles}
@@ -1470,8 +1495,10 @@ from UKRI.
 	\centering
 	\begin{tikzpicture}
 	\begin{axis}[
-		xlabel=Funding Percentile,
-		ylabel=Organisations,
+		xlabel=Organisation percentile by total funding received,
+		ylabel=No. of orgs. collaborated with (cum.),
+		scaled y ticks = false,
+		y label style={at={(axis description cs:-0.1,.5)}},
 		mark=none,
 		stack plots=y,
 		area style,
@@ -1480,6 +1507,7 @@ from UKRI.
 		},
 		legend pos=outer north east,
 	]
+		\draw [red] (axis cs:40,0) -- (axis cs:40,50000);
 		\addplot+ table [
 			x=percentile,
 			y=unknown,
@@ -1507,9 +1535,15 @@ from UKRI.
 		\addlegendentry{Public}
 	\end{axis}
 	\end{tikzpicture}
-	\caption{Total number of organisations that have collaborated with at least
-		one other organisation below a certain percentile of total funding
+	\caption{Cumulative distribution of all organisations in the UKRI database,
+		filtered by ones that have collaborated with at least one other
+		organisation at a certain percentile.
+		Organisations are ranked by the total amount of funding they have
 		received.
+		E.g. the red vertical line indicates that there are just over 10,000
+		organisations that have collaborated with at least one other
+		organisation at or below the 40th percentile, when ranked by the total
+		amount of funding this organisation has received.
 		Generated with \texttt{OrgFundingPercentileCollab} in
 		\nameref{stats.sql}}
 	\label{fig:orgFundingPercentileCollab}
@@ -1530,8 +1564,17 @@ database have only collaborated with the top 10% most funded organisations.
 	\centering
 	\begin{tikzpicture}
 	\begin{axis}[
-		xlabel=Funding Percentile,
-		ylabel=Projects,
+		xlabel=Project percentile by total funding received,
+		ylabel=No. of projects (cum.),
+		y tick label style={
+			/pgf/number format/.cd,
+			fixed,
+			fixed zerofill,
+			precision=0,
+			/tikz/.cd
+		},
+		scaled y ticks = false,
+		y label style={at={(axis description cs:-0.1,.5)}},
 	]
 		\addplot+ [
 			smooth,
@@ -1543,8 +1586,9 @@ database have only collaborated with the top 10% most funded organisations.
 		] {data/orgFundingPercentileProjects.csv};
 	\end{axis}
 	\end{tikzpicture}
-	\caption{Total number of projects involving an organisation below a certain
-		percentile of total funding received.
+	\caption{Cumulative distribution of projects by percentile, across the
+		entire UKRI database.
+		Projects are ranked by how much total funding they received.
 		Generated with \texttt{OrgFundingPercentileProjects} in
 		\nameref{stats.sql}}
 	\label{fig:orgFundingPercentileProjects}
@@ -1565,8 +1609,6 @@ While it is impossible to prove causality from this, the results support the
 theory that, when an organisation is deciding whether to collaborate with
 another, the total research funding that other organisation has received is a
 factor.
-
-\newpage
 
 # Summary and Reflections
 
