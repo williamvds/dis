@@ -85,7 +85,6 @@ including:
 
 # Motivation
 
-<!-- Project's motivation -->
 This project's goal is to explore the value of open data and government
 transparency.  
 To achieve this, the project will discover how existing open data and existing
@@ -568,13 +567,6 @@ included:
 \newpage
 
 ## Cleaning data
-
-<!--
-Reasoning: good outcomes analysis
-Goals:
-	- remove junk (useless) records
-	- merge duplicates
--->
 
 Data cleaning is an important step that precedes data analysis: it ensures that
 the data used during analysis is of high quality, including being free of errors
