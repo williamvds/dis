@@ -1306,6 +1306,71 @@ Electronics Limited.
 
 ## Analysis
 
+### Classifying organisations by type
+
+A variety of organisations exist in the database, from universities, local
+councils, medical institutions, to private companies.  
+Through manually exploring the dataset, I found that these can often be
+identified from their names, e.g. universities will almost always have the word
+"University" in their names, and many hospitals will have the word "Hospital".
+
+I decided to create 4 classifications:
+
+- __Academic__: For academic institutions like universities, colleges, and other
+  schools
+- __Medical__: Medical institutions like hospitals, medical research
+  institutions, and other healthcare providers
+- __Private__: Privately owned corporations
+- __Public__: Government bodies and publically-funded institutions
+
+Names are the only data point used when classifying organisations, as they are
+the only related information on organisations contained within the Gateway to
+Research database.  
+Organisation records (and records that are listed as duplicates) are searched
+for particular keywords that indicate their type:
+
+| Type     | Exemplary keywords                              |
+|----------|-------------------------------------------------|
+| Academic | University, College, Academy, Academic          |
+| Medical  | Hospital, NHS, Medical, Health                  |
+| Private  | Limited/LTD, Corporation, Company, Incorporated |
+| Public   | Council, Government, Governorate                |
+
+This type is stored as an additional field within the `orgs` table, which
+contains records which have been de-duplicated and no records classified as
+'junk'.  
+Classification is performed in the procedure [classifyOrgs.sql].  
+After applying this procedure, 21694 of 39578 organisation records (54.8%) were
+given a type.
+
+I attempted to maximise the amount of keywords picked up by manually searching
+for common abbreviations, such as LTD, LLP, and PLC for private limited
+companies. The procedure also takes into account the optional period at the end
+of these abbreviations, such as "Uni." for "University".  
+Another issue is that of keyword overlap: e.g. is Albany Medical College a
+medical institution or an academic one? Through manual research we can discover
+that it is indeed an academic one, but as the procedure classifies medical
+organisations after academic ones, these are categorised as medical.  
+An improvement to this procedure could be to consider combinations of words
+that appear in the outliers, ordered to prioritise these patterns over single
+keywords.
+
+As just under half of organisations remain unclassified, it is clear that using
+names alone is insufficient if the goal is to maximise the number of
+organisations classified.  
+Another improvement would be to refer to a public database such as the UK's
+[Companies House](https://beta.companieshouse.gov.uk) service. This could be
+used to determine both the legal classification and the 'nature of business'
+of an organisation, which may indicate the activities that the organisation
+takes part in.
+The nature of business is reported by the company themselves, and so may not be
+entirely reliable: g.g., the [Nottingham University Hospitals Trust
+Charity](https://beta.companieshouse.gov.uk/company/09978675) lists their nature
+of business as "hospital activities" despite also being an educational
+institution.  
+The categories used by Companies House are provided on their website:
+@companiesHouseSIC.
+
 ### Important factors in collaboration
 
 <!--
