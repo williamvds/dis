@@ -1304,6 +1304,19 @@ systems](https://gtr.ukri.org/projects?ref=113057), led by [Intelligent Energy
 Limited](https://www.intelligent-energy.com) and partnered with Frost
 Electronics Limited.
 
+In the free version of NodeXL, the available analyses are greatly limited. While
+it supports several algorithms Gephi also supports (such as clustering
+coefficients and eigenvector centrality), these are limited to the paid version.
+One available analysis available is degree distribution, which is shown in
+figure \ref{fig:midlands2005_2010Degree}.  
+Just as in the 2005-2008 network, the vast majority of organisations are
+involved in only a few collaborations, with higher amounts of collaboration
+being increasingly rare.
+Degrees above 20 seem to have become rarer in the 2005-2010 time range, but the
+top degree is 172 compared to 2002-2008's 114. This suggests a lower amount of
+collaboration from most organisations in this later time period, but the top
+organisations are involved in more.
+
 \newpage
 
 ## Analysis
@@ -1855,9 +1868,25 @@ factor.
 	\includegraphics[width=0.7\textwidth]{midlands2002-2008/clustering.png}
 	\caption{Clustering coefficient distribution of the East Midlands funding
 	network (2002-2008), where nodes are organisations and edges are projects
-	those organisations are collaborating on.}
+	those organisations are collaborating on.
+	It shows that organisations are much more likely to only be involved in a
+	few collaborations, and organisations with high amounts of collaboration
+	are few and far between.}
 	\label{fig:midlands2002_2008Clustering}
 \end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\textwidth]{nodeXLDegrees}
+	\caption{Degree distribution of the East Midlands funding network
+	(2005-2010), where nodes are organisations and edges are projects
+	those organisations are collaborating on.
+	It shows that organisations are much more likely to only be involved in
+	a few collaborations, and organisations with high amounts of
+	collaboration are few and far between.}
+	\label{fig:midlands2005_2010Degree}
+\end{figure}
+
 
 \begin{sidewaysfigure}
 	\subsection{East Midlands network (2005-2010)}
