@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS nodes;
 CREATE TEMP TABLE IF NOT EXISTS nodes AS
 SELECT
 	gtrOrgUuid AS id,
@@ -6,23 +7,16 @@ SELECT
 FROM
 	orgs o
 WHERE
-	CONCAT(
-		name, ' ',
-		address1, ' ',
-		address2, ' ',
-		address3, ' ',
-		address4) ~* '\ynottingham(shire)?\y'
-	OR region = 'East Midlands'
-	OR postcode ~* '^ng';
+	region = 'East Midlands';
 
 \copy (SELECT * FROM nodes) TO data/eastMidlandsGraphGephiNodes.csv (FORMAT CSV, HEADER)
 
-CREATE TEMP TABLE IF NOT EXISTS orgsMidlandsEdges AS
+DROP TABLE IF EXISTS edges;
+CREATE TEMP TABLE IF NOT EXISTS edges AS
 SELECT
 	po1.projectUuid AS projectUuid,
 	o1.gtrOrgUuid AS source,
 	GREATEST(po1.offer::numeric::int, po1.cost::numeric::int, 1) AS weight,
-	 AS cost,
 
 	o2.gtrOrgUuid AS target,
 	p.title AS label,

@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS edges;
 CREATE TEMP TABLE edges AS
 SELECT
 	o1.gtrOrgUuid AS source,
