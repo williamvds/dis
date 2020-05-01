@@ -1304,6 +1304,8 @@ systems](https://gtr.ukri.org/projects?ref=113057), led by [Intelligent Energy
 Limited](https://www.intelligent-energy.com) and partnered with Frost
 Electronics Limited.
 
+\newpage
+
 ## Analysis
 
 ### Classifying organisations by type
