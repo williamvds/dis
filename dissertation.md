@@ -144,21 +144,10 @@ project are also listed.
 This is the main dataset that will be used throughout this project, as it
 includes most information relevant to the intended research.
 
-[The Decision Platform](https://www.decisionplatform.io) (TDP): A consultancy
-organisation that performs analysis on data to support business decision making.
-TDP have agreed to collaborate in this project, and are willing to provide the
-data they have available on the businesses mentioned in the UKRI dataset.  
-The data provided should nicely complement the UKRI dataset, which only provides
-the names and addresses of organisations. Having extra context will help produce
-more useful analysis into the impact of research on businesses.  
-TDP are also keen to explore the potential value of information regarding
-government funding, in particular identifying the level of development of
-certain technologies and how close they are to market release.
-
 [Data.gov.uk](https://data.gov.uk), [European Data Portal](https://europeandataportal.eu), [UK Transparency and FOI Releases](https://gov.uk/search/transparency-and-freedom-of-information-releases), [Data.gov](https://data.gov):
 catalogues datasets released by government institutions of the United Kingdom,
 European Union, and United States of America respectively.  
-These could be used to provide additional context to the UKRI and TDP datasets,
+These could be used to provide additional context to the UKRI dataset,
 if needed. Should time allow, research data from other regions such as the
 United States may be explored, in a similar manner to the that of the United
 Kingdom.
@@ -207,17 +196,11 @@ and initial insights gained by exploring the available data.
   subjects over time?
 - Is it possible to predict how close technologies are to reaching the market?
 
-The Decision Project will be presented with the findings of this project to
-provide feedback on how they could apply the collected data and findings to
-their business.
-
 ## Technical description
 
 This project will explore open government data from the United Kingdom relating
 to grants and investment in research and development. Specifically, it will use
-the Gateway to Research database from UK Research and Innovation.  
-This dataset will be combined with data on businesses from The Decision Project,
-which provides information such as financial performance.
+the Gateway to Research database from UK Research and Innovation.
 
 These datasets will be aggregated, normalised, and linked so that all available
 information can be used during the project's research. This will involve
@@ -307,15 +290,12 @@ historical data.
 	(i) Outcomes of analysis will be evaluated
 	(i) The accuracy of machine learning models will be tested and evaluated
 	(i) Conclusions will be made to answer the desired questions
-	(i) TDP will be presented with results and provide feedback  
 	\
 	Relationships identified through network analysis will be evaluated to
 	explore how well they answer the research questions. Machine learning
 	analyses performed will be tested to identify their accuracy from the
 	available data, and different algorithms used to perform the same analysis,
-	e.g. how well one can be used to predict collaboration between two parties.  
-	TDP will provide feedback on usefulness and the potential impact the
-	findings could have on their business.
+	e.g. how well one can be used to predict collaboration between two parties.
 
 # Design
 
