@@ -58,49 +58,47 @@ actions of government and their officials - a tradition that can be traced back
 to ancient Greece [@von1997straight].  
 This idea that data should be pro-actively published and freely available
 is known as the principle of _open data_ [@openDefinition2.1]. This transfers
-some of the responsibility of oversight - governments must make available
+some of the responsibility of oversight; governments must make available
 facts that could reveal misbehaviour or areas that could be improved.
 
 Open government data often includes topics such as election statistics,
-department budgets & expenditures, and significant individuals within
-organisations. These topics are useful in identifying undesirable
+department budgets & expenditures, and information about significant individuals
+within organisations. These topics are useful in identifying undesirable
 behaviour like corruption and nepotism.  
 Other areas such as statistics in crime, justice, and healthcare could be used
 to check that a government is acting in the best interests of its citizens.
 
 There are some unfortunate limitations in the way that governments publish open
-data that don't properly follow the principles of open data, including not using
-open formats and providing data in a manner which is not machine-readable.  
-This makes the data harder to use by both inquisitive citizens who are
-interested in finding out facts about their government, and by researchers
-looking to perform quantitative research on the data available.
+data. They do not properly follow the principles of open data, failing to use
+open formats and formats that are not machine-readable.  
+This makes the data harder to use by both citizens interested in finding out
+facts about their government, and by researchers looking to perform quantitative
+research on the data available.
 
 Consequentially, analysing open government data requires a few extra steps,
 including:
 
 - __Collecting__ datasets from multiple sources.
-- __Cleaning__ data that is, e.g. sparse or invalid.
-- __Linking__ data from the different sources, combining the available
+- __Cleaning__ data that is invalid or incomplete
+- __Linking__ data from the different sources, i.e. combining the available
 	information.
 
 # Motivation
 
 This project's goal is to explore the value of open data and government
 transparency.  
-To achieve this, the project will discover how existing open data and existing
-government data publishing platforms can used to perform specific research and
-produce useful findings.  
+It discovers how existing open data and existing government data publishing
+platforms can used to perform specific research and produce useful findings.  
 
-My intention is to go through the entire process needed to a achieve this to
-perform first-hand the steps necessary for research and the difficulties that
-one faces in such data analysis projects.  
-I believe that the current ways in which governments publish open data to be
-lacking, such that potential applications of open data are being inhibited.  
-The focus will be on open data published by the government of the United
-Kingdom, and I hope to identify the areas where the UK's open data practices are
-lacking to be able to suggest potential improvements to them.
+My intention is to apply the full process needed to conduct in-depth data
+analysis and address the challenges that one faces while working with open data.
+Outcomes of this effort will include insights into ways to improve government
+publishing of open data in order to enable a range of use scenarios and
+potential applications.  
+The focus is on open data published by the government of
+the United Kingdom.
 
-# Related works and resources
+# Related work and resources
 
 ## Papers
 
@@ -121,26 +119,27 @@ of record linkage.
 Records from different datasets need to be linked together in order for the
 relationships between entities to be explored, and to provide extra information
 about individual entities, such as businesses and grants.  
-The methods described in the paper will be useful when linking records in the
-datasets I collect.
+The methods described in the paper were helpful through the process of linking
+records in the dataset, particularly in describing algorithms and heuristics for
+record comparison.
 
 @elmagarmid2006duplicate: Techniques for detecting duplicate records in a
 database are explored and explained in detail.  
-Among other things, duplicate records in the datasets used will need to be
-merged in order for the data analysis to produce high quality and accurate
-results. This paper is a useful reference for methods that I could use to
-perform this.
+Among other things, duplicate records in the datasets used in this project need
+to be merged in order for the data analysis to produce high quality and accurate
+results. This paper provides a valuable reference for methods used during this
+process, including Q-gram matching.
 
 ## Data sources
 
 [UK Research and Innovation](https://www.ukri.org) (UKRI): A non-governmental
 organisation that funds research and innovation in the UK through grants. It is
 an umbrella organisation for several 'research councils' in several industries
-and areas. Data on funding is made publicly available through the [Gateway to
-Research](https://gtr.ukri.org) database. This provides details on each project,
-organisations & individuals involved, and catalogues research outcomes as
-summarised by the researchers. Relevant research papers produced during the
-project are also listed.  
+and areas. Data on funding from each council is made publicly available through
+the [Gateway to Research](https://gtr.ukri.org) database.  
+This provides details on each project, organisations & individuals involved, and
+catalogues research outcomes as summarised by the researchers. Relevant research
+papers produced during the project are also listed.  
 This is the main dataset that will be used throughout this project, as it
 includes most information relevant to the intended research.
 
@@ -149,7 +148,7 @@ catalogues datasets released by government institutions of the United Kingdom,
 European Union, and United States of America respectively.  
 These could be used to provide additional context to the UKRI dataset,
 if needed. Should time allow, research data from other regions such as the
-United States may be explored, in a similar manner to the that of the United
+United States may be explored, in a similar manner to that of the United
 Kingdom.
 
 ## Software
@@ -177,10 +176,14 @@ case in this project.
 
 # Description of work
 
-The aim to leverage open government data about investment in research &
-innovation and businesses in different development stages, to determine the
-relationship between levels of investment and the impact on businesses within
-various sectors.
+The aim is to leverage computational techniques and open government data about
+investment in research & innovation and businesses in different development
+stages, to determine the relationship between levels of investment and the
+impact on businesses within various sectors.  
+Such analysis is of interest to companies that analyse markets, e.g. to support
+business decision making. This includes [The Decision
+Project](https://www.decisionplatform.io), who expressed an interest in
+being involved in the project.
 
 ## Research questions
 
@@ -189,37 +192,40 @@ Decision Project, or as potential interesting analysis from preliminary research
 and initial insights gained by exploring the available data.
 
 - Which businesses are involved in research and development of specific
-  technologies? Which are the up-and-coming players?
+  technologies? Which businesses are the up-and-coming participants in the
+  innovation ecosystem?
 - What are the significant factors that influence collaboration between
   organisations?
-- Is it possible to predict the change in popularity of certain research
+- Is it possible to predict the change in popularity of specific research
   subjects over time?
-- Is it possible to predict how close technologies are to reaching the market?
+- Is it possible to predict how close technologies are to commercialisations and
+  market adoption?
 
-## Technical description
+## Technical approach
 
-This project will explore open government data from the United Kingdom relating
-to grants and investment in research and development. Specifically, it will use
+This project explores open government data from the United Kingdom relating
+to grants and investment in research and development. Specifically, it uses
 the Gateway to Research database from UK Research and Innovation.
 
-These datasets will be aggregated, normalised, and linked so that all available
-information can be used during the project's research. This will involve
-translating the schema of these datasets into a single schema, which will be
-implemented using the PostgreSQL database management system.
+This dataset is aggregated, normalised, and linked so that all available
+information can be used during the project's research. This involves
+translating the schema of this dataset into a new schema which encapsulates both
+existing and new data. This schema is then implemented using the PostgreSQL
+database management system.
 
-Focus will be placed on applying existing data analysis and machine
-learning techniques on these datasets which contain both structured and
-unstructured data.  
-Network analysis methods will be used to identify the relationships between
-entities in the datasets. Correlation analysis will be performed to answer
+Focus is placed on applying existing data analysis and machine learning
+techniques on these datasets which contain both structured and unstructured
+data.  
+Network analysis methods are used to identify the relationships between
+entities in the datasets. Correlation analysis is performed to answer
 questions based on historical data.  
-Visualisations will be created to show the identified relationships and other
+Visualisations are created to show the identified relationships and other
 findings.  
 Machine learning methods such as decision trees and artificial neural networks
-will be applied to perform predictive analyses required by some research
-questions. This will require identifying the most significant attributes within
+are applied to perform predictive analyses required by some research
+questions. This requires identifying the most significant attributes within
 the dataset that contribute best to answering the questions.  
-Each method applied will be evaluated to identify each performs with respect to
+Each method applied is evaluated to identify each performs with respect to
 the accuracy or usefulness of findings or predictions. For example, a predictive
 model for the popularity of a subject over time could be tested against
 historical data.
@@ -229,105 +235,61 @@ historical data.
 # Methodology
 
 (1) __Data aggregation__
-	(i) Datasets will be exported from the UKRI Gateway to Research database
-	(i) Data points will be extracted and normalised where necessary
-	(i) A database schema will be designed
-	(i) Records will be imported into a single relational database  
+	(i) Datasets exported from the UKRI Gateway to Research database
+	(i) Data points extracted and normalised where necessary
+	(i) Design a database schema to accommodate storage of data attributes
+	    and metadata
+	(i) Import all records into a single relational database  
 	\
-	In order to link and ultimately analyse the data, each dataset will parsed
+	In order to link and ultimately analyse the data, each dataset was parsed
 	and exported from their original format into a single database. Individual
-	data points will be extracted to normalise the data, such that it can be
+	data points are be extracted to normalise the data, such that it can be
 	stored in a relational database.  
-	A database schema will need to be designed so that records from all datasets
-	are available in a single relational database. This will enable relationship
-	analysis and other future analyses.  
-	Focus will be placed on data that is well-formatted and machine-readable.
-	Besides numeric and categorical data, processing text may also be
-	considered, using natural language processing techniques to extract data
-	points.
+	A database schema is needed so that records from all datasets are available
+	in a single relational database. This enables relationship analysis and
+	other analyses.  
+	Focus was placed on data that is well-formatted and machine-readable.
+	Besides numeric and categorical data, text was also processed.
 \
 (1) __Linking datasets__  
-	(i) Low-quality or invalid records will be discarded
-	(i) Duplicate records will be merged
-	(i) Research into appropriate linking methods will be performed
-	(i) Records that refer to the same entity will be linked or merged  
+	(i) Discard low-quality or invalid records
+	(i) Research appropriate linking & de-duplication methods
+	(i) Merge duplicate records
 	\
 	Some records refer to non-existent entities, such as unnamed businesses
 	listed as participants in research projects. These records are unusable
-	for the purposes of this project, so they will need to be identified and
+	for the purposes of this project, so they need to be identified and
 	removed. These records are identifiable by their similar names and lack of
 	other details.  
-	Datasets may refer to the same business or grant by different names, causing
+	Datasets can refer to the same business or grant by different names, causing
 	duplicate entries in the database. In such cases similarity comparison
-	algorithms will be applied to automatically identify the single entity which
-	is being referred to. Some manual work will be performed to clean up
+	algorithms is be applied to automatically identify the single entity which
+	is being referred to. Some manual work was performed to clean up
 	remaining duplicates.
 \
 (1) __Analysing data__  
-	(i) Useful tools will be researched and tested
-	(i) Network analysis will be used to identify relationships
-	(i) Analysis will be performed to answer the desired questions
-	(i) Machine learning will be applied to perform predictions
-	(i) Software will be developed to perform analysis, visualisation, and
-	learning
-	(i) Visualisations will be created to show relationships and other results  
+	(i) Research and test useful tools
+	(i) Perform network analysis to identify relationships
+	(i) Analyse data to will to answer the desired questions
+	(i) Develop software to perform analysis, visualisation, and learning
+	(i) Create visualisations to show relationships and other results  
 	\
-	Research will be performed to identify tools that could be useful in
-	analysis or visualisation. Some time will also be spend developing software
-	to apply existing analysis, visualisation, and machine learning tools to the
-	collected data.
+	Research was performed to identify tools that could be useful in
+	analysis or visualisation. Software was developed to apply existing
+	analysis and visualisation tools to the collected data.
 	\
-	An initial network analysis will be performed on the linked data to identify
-	and visualise some interesting relationships between the entities.
+	An initial network analysis was performed on the linked data to
+	identify and visualise some interesting relationships between the entities.
 	\
-	A number of analysis algorithms will then be applied to explore these
-	relationships, including correlation analysis.
-	Regression machine learning techniques would be applied to create predicting
-	models for success and outcomes. Some methods being considered are
-	decision tree learning algorithms and artificial neural networks.
+	A number of analysis algorithms were then applied to explore these
+	relationships.
 \
 (1) __Evaluating results__  
-	(i) Outcomes of analysis will be evaluated
-	(i) The accuracy of machine learning models will be tested and evaluated
-	(i) Conclusions will be made to answer the desired questions
+	(i) Evaluate outcomes of analysis
+	(i) Make conclusions to answer the desired questions
 	\
-	Relationships identified through network analysis will be evaluated to
-	explore how well they answer the research questions. Machine learning
-	analyses performed will be tested to identify their accuracy from the
-	available data, and different algorithms used to perform the same analysis,
-	e.g. how well one can be used to predict collaboration between two parties.
-
-# Design
-
-## Database
-
-Aggregated data will be imported into a single relational database management
-system, which will enable analysis through queries composed in the Structured
-Query Language (SQL).  
-The schema of the database is designed to be _normalised_, such that each atomic
-piece of information is stored in an individual field. This minimises data
-duplication - particularly helpful when handling large databases such as in this
-project - as well as enabling analysis of individual components of records.
-
-All aggregated data will be kept in the database so that it can be used
-throughout the project. As a result some information may be duplicated, as
-records can be duplicated within and between data sources.  
-In order to differentiate between the sources of data, tables containing data
-from the Gateway to Research database are prefixed with 'gtr'.
-All other tables contain data formed from this project.
-
-The design for data from the Gateway to Research database is based partially on
-the contents of the GtR API manual [@gtrapi2manual], which explains the contents
-of the records returned by the API.  
-In occasions where the manual provided inaccurate or incomplete information, the
-XML schema of records and some exported records were visually inspected to
-identify how best to normalise each type of record. For example, the XML schema
-for individuals is available [through the REST
-API](https://gtr.ukri.org/gtr/api/person).  
-
-The Entity Relationship Diagram in figure \ref{fig:erd} describes the tables
-that exist in the database schema, including their fields and relationships to
-other tables.
+	Relationships identified through network analysis were be evaluated to
+	explore how well they answer the research questions.
 
 \newpage
 
@@ -422,14 +384,33 @@ The source code of the main download program is provided in the appendix section
 
 ## Importing data
 
+Aggregated data is imported into a single relational database management
+system, which will enable analysis through queries composed in the Structured
+Query Language (SQL).  
+The schema of the database is designed to be _normalised_, such that each atomic
+piece of information is stored in an individual field. This minimises data
+duplication - particularly helpful when handling large databases such as in this
+project - as well as enabling analysis of individual components of records.
+
+All aggregated data is kept in the database so that it can be used
+throughout the project. As a result some information is duplicated, as records
+exist in both the original dataset and the cleaned dataset.
+In order to differentiate between the sources of data, tables containing data
+from the Gateway to Research database are prefixed with 'gtr'.
+All other tables contain data formed from this project.
+
+The design for data from the Gateway to Research database is based partially on
+the contents of the GtR API manual (@gtrapi2manual), which explains the contents
+of the records returned by the API.  
+In occasions where the manual provided inaccurate or incomplete information, the
+XML schema of records and some exported records were visually inspected to
+identify how best to normalise each type of record. For example, the XML schema
+for individuals is available [through the REST
+API](https://gtr.ukri.org/gtr/api/person).  
+
 The final database design is visualised figure \ref{fig:erd}, and
 was applied to the PostgreSQL database management system. The implementation of
 the schema is in a SQL file provided in appendix section [setup.sql].
-
-Adjustments were made to the original design (shown in figure
-\ref{fig:initialErd}) after more in-depth analysis of the contents of the GtR
-database. This resulted in additional tables being
-created, such as `gtrTopics`, `gtrProjectSubjects`, and `gtrDisseminations`.
 
 PostgreSQL has good support for importing structured XML data, though the
 structure of the XML records must be mapped to the relational and normalised
