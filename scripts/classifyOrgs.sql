@@ -29,7 +29,7 @@ WITH matches AS (
 		LEFT OUTER JOIN duplicateGtrOrgs d
 			ON o.orgUuid IN (d.orgUuid, d.duplicateUuid)
 	WHERE
-		name ~* '\y((ltd|llc|llp|plc|gmbh|inc|corp|co)\.?|limited|enterprises?|corporation|company)\y'
+		name ~* '\y((ltd|llc|llp|plc|gmbh|inc|corp|co)\.?|limited|enterprises?|corporation|company|incorporated)\y'
 )
 UPDATE orgs o
 SET type = 'Private'
