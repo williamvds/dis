@@ -1102,8 +1102,8 @@ topics of projects they have been involved in.
 
 ### East Midlands network with Gephi
 
-I used [Gephi](https://gephi.org), a graph analysis tool, to plot the network of
-organisations based in the East Midlands region or Nottingham.  
+I used [Gephi](https://gephi.org), a Java-based graph analysis tool, to plot the
+network of organisations based in the East Midlands region or Nottingham.  
 This software was chosen as it is free and open source, and so it costs nothing
 to use. Documentation also suggested it was easy to use, which would enable me
 to quickly get to grips with the application in order to use it in this project.
@@ -1112,6 +1112,19 @@ network analysis and visualisation, the possibilities of which I was keen to
 apply to explore.  
 Organisations were selected if they had 'East Midlands' specified as their
 region.
+
+Limiting the dataset in this manner resulted in analysis being much faster to
+perform, as only 1226 of 39578 organisations match this criteria. Fewer records
+means less computational power is needed to manipulate the dataset in Gephi.  
+While Gephi is able to load the entire dataset if the Java virtual machine is
+allowed to use more system memory (e.g. by setting `_JAVA_OPTIONS="-Xms1024m
+-Xmx10000m"`), adjusting the layout, filtering, or calculating statistics still
+took a significant amount of time.  
+I also found that limiting the dataset significantly increased the legibility of
+the resulting graph, as having fewer nodes and edges means less overlap. With
+all nodes and edges visible, it was impossible to distinguish individual edges
+due to the massive number of them - 283197 in total. In the filtered dataset
+this number is reduced to a much more manageable 4679.
 
 In the graph, nodes represent organisations, and edges represent projects that
 both organisations were involved in.  
@@ -1126,6 +1139,7 @@ In order to make the network explorable through different periods of time, the
 start and end date of projects were merged to create the interval during which
 the edges apply.
 
+Nodes were filtered to those with at least one connection.  
 Edges were filtered to projects that were active within the years 2002-2008,
 then Yifan Yu's propertional graph layout algorithm (@yhugraph) was applied.
 This layout algorithm clusters related nodes while minimising the amount of edge
@@ -1235,9 +1249,14 @@ As the University provides complimentary access to the Microsoft Office suite,
 and a free version is provided, I decided to try applying it to this project.
 
 Similarly to the Gephi network, I filtered organisations to the East Midlands
-region, so that the network is of a more manageable size. I decided to explore a
-different year range for projects, from 2005 to 2010 instead. As a result, the
-differences in the networks can be explored.
+region, for the same reasons as explained in [East Midlands network with Gephi].  
+Microsoft Excel performed much worse compared to Gephi when I attempted to
+handle the entire dataset. The application regularly became unresponsive when
+manipulating the dataset or when NodeXL was generating graphs.  
+I decided to explore a different year range for projects than was explored in
+the Gephi visualisation, from 2005 to 2010, so the differences in the
+networks can be explored.  
+This resulted in 327 nodes and 806 edges being selected for this network.
 
 The procedure for exporting this data is provided in
 [eastMidlandsGraphNodeXL.sql].
