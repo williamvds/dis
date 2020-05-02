@@ -527,23 +527,20 @@ included:
 
 ## Data cleaning
 
-Data cleaning is an important step that precedes data analysis: it ensures that
-the data used during analysis is of high quality, including being free of errors
-and that records contain the information that is needed for them to be analysed.
-The use of low quality data negatively impacts the results of its analysis,
-resulting in less useful outcomes (@rahm2000data).
 
-The Gateway to Research database is a collection of databases maintained by
-subsidiaries of UKRI, as well as UKRI's own database. It thus contains
-information entered by researchers and other individuals involved in the grant
-funding process.  
-As a result, human error can result in erroneous data being
-entered, or duplicate records being created for entities that already have a
-record in the database. These problems are classified as 'single-source'
-problems, as they occur even a single database is being considered.  
-The introduction of multiple databases then introduce 'multi-source problems',
-such as different encodings for the roles of organisations, or different
-monetary systems being used for currency values.
+Data cleaning is required to  ensure that the data used during analysis is of
+high quality, i.e. free of errors and sufficient for the planned analysis. The
+use of low quality data negatively impacts analysis, resulting in inaccuracies
+and less useful outomces (@rahm2000data).
+
+The Gateway to Research data is entered by researchers and individuals involved
+in the grant funding process. As a result, human error can result in erroneous
+data and duplicate records.  
+These problems are classified as 'single-source' problems, as they occur even a
+single database is being considered. The introduction of multiple databases
+then introduce 'multi-source problems', such as different encodings for the
+roles of organisations, or different monetary systems being used for currency
+values.
 
 In order to make the development and further steps of this project simpler, the
 processes undertaken to clean data avoided removing or modifying any data
@@ -551,7 +548,7 @@ imported from the Gateway to Research database. Instead, new database tables
 and/or fields were created to store information during the cleaning process, as
 well as storing the outcomes of cleaning: merged records.
 
-### Eliminating junk records
+### Eliminating invalid records
 
 The first step taken during data cleaning was to identify records that contain
 no useful information and/or do not refer to a real entity. For example, an
@@ -617,9 +614,9 @@ These records do not refer to a real organisation entity, and are isolated
 from other records due to their links not being imported, hence relationships
 between these entities cannot be analysed.  
 For these reasons, I decided to add organisation records with no linked projects
-to the junk records collection.
+to the invalid records collection.
 
-As a result, 5213 of 47822 (10.9%) organisation records were marked as junk
+As a result, 5213 of 47822 (10.9%) organisation records were marked as invalid
 records.
 
 ### Organisation roles
@@ -727,7 +724,7 @@ confirmed to be unique entities.
 
 ### Entity name analysis
 
-Visual exploration of data revealed small variations with how organisation names
+Manually exploring records revealed small variations with how organisation names
 were entered into the database, as expected of data entered by untrained users.  
 For example, private companies incorporated as 'limited' often contain a
 variation of 'Limited', 'Ltd', or 'Ltd.' in their names. The names of duplicate
@@ -797,14 +794,22 @@ The calculated values for trigram similarity were stored for names of
 organisations (`similarGtrOrgs.simTrigramName`) and people
 (`similarGtrPeople.simTrigramName`).
 
-My first attempt in running these scripts involved calculating the similarity of
-every pair of records, but this failed after a significant amount of time, once
-it had completely filled the remaining 50GB or so available on the storage
+An initial attempt at running these scripts involved calculating the similarity
+of every pair of records, but this failed after a significant amount of time,
+once it had completely filled the remaining 50GB or so available on the storage
 device the database was being stored.  
 In order to avoid this, I filtered pairs by requiring that they share at least
 50% of trigrams in their names. This allows the
 amount of data generated from this procedure to be significantly reduced, down
 to 243363 from 1151976000 rows for organisations.  
+
+An initial attempt to compute the pairwise similarity of records proved to be
+computational infeasible. It required over 30 minutes and a storage space of
+more than 50GB before the procedure failed due to running out of disk space.
+In order to address this issue, record pairs were filtered to include
+those that share at least 50% of trigrams in their names. This reduced the
+amount of data generated down to 243363 from the original 1151976000 rows for
+organisations.
 
 #### Organisations
 
@@ -936,7 +941,7 @@ identified that the specified postcodes can be used to reliably identify whether
 similarly named records are indeed duplicates.  
 Hence, I decided to merge organisation records if the following conditions hold:
 
-1. Neither of the pair is listed as a junk record
+1. Neither of the pair is listed as a invalid record
 1. The pair share at least 90% of trigrams in their names, or
 1. The pair share at least 50% of trigrams in the names, both have specified
    postcodes, and the postcodes match
@@ -1022,8 +1027,10 @@ duplicates.
 
 Name trigram similarity is an effective heuristic for detecting duplicate
 organisations, as these tend to use more unique names to distinguish themselves.
-The same is not true of people, due to the popularity and wide re-use of names
-within populations.
+The same is not true of people: due to the wide re-use of names within
+populations, names alone cannot be used to uniquely identify a real individual.
+In these cases additional contextual information must be used to ascertain
+duplication, such as an individual's employer.
 
 Using name comparison is more effective when common variations of the same words
 or names are substituted for a single variation before comparison. However, this
@@ -1031,8 +1038,10 @@ approach is limited by the requirement of domain knowledge being applied or a
 significant amount visual inspection being done.
 
 Name comparisons are more reliable when combined with the comparison of other
-information available, such as the addresses of organisations, or people's
-employers.
+information available, such as the addresses of organisations.  
+4871 of 47822 (10.2%) organisation records are detected as duplicates when the 
+heuristic is that they share 90% or more of trigrams in their name.
+By checking whether postcodes match, this number rises to 5935 (12.4%).
 
 Limitations to these heuristics include:
 
@@ -1091,7 +1100,7 @@ for particular keywords that indicate their type:
 
 This type is stored as an additional field within the `orgs` table, which
 contains records which have been de-duplicated and no records classified as
-'junk'.  
+invalid.  
 Classification is performed in the procedure [classifyOrgs.sql].  
 After applying this procedure, 21694 of 39578 organisation records (54.8%) were
 given a type.
