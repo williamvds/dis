@@ -285,7 +285,7 @@ historical data.
 	relationships.
 \
 (1) __Evaluating results__  
-	(i) Evaluate outcomes of analysis
+	(i) Evaluate outcomes of analysis using metrics appropriate for each method
 	(i) Make conclusions to answer the desired questions
 	\
 	Relationships identified through network analysis were be evaluated to
@@ -293,9 +293,9 @@ historical data.
 
 \newpage
 
-# Implementation
+# Data acquisition & preparation
 
-## Aggregating data
+## Data aggregation
 
 The UKRI Gateway to Research (GtR) service is [available online](https://gtr.ukri.org).
 The service also provides APIs that allow programmatic access to the database,
@@ -314,13 +314,13 @@ accessed at the URL
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<ns2:organisations xmlns:ns1="http://gtr.rcuk.ac.uk/gtr/api" xmlns:ns6="http://gtr.rcuk.ac.uk/gtr/api/project/outcome" xmlns:ns5="http://gtr.rcuk.ac.uk/gtr/api/project" xmlns:ns3="http://gtr.rcuk.ac.uk/gtr/api/fund" xmlns:ns4="http://gtr.rcuk.ac.uk/gtr/api/person" xmlns:ns2="http://gtr.rcuk.ac.uk/gtr/api/organisation" ns1:page="1" ns1:size="20" ns1:totalPages="2425" ns1:totalSize="48487">
-	<ns2:organisation ns1:created="2020-01-28T17:07:16Z" ns1:href="https://gtr.ukri.org:443/gtr/api/organisations/D446F3B8-D9C3-4B5B-82CA-07608A3C27A9" ns1:id="D446F3B8-D9C3-4B5B-82CA-07608A3C27A9">
+<ns2:organisations ...> 
+	<ns2:organisation ns1:created="2020-01-28T17:07:16Z" ...>
 		<ns1:links>
-			<ns1:link ns1:href="https://gtr.ukri.org:443/gtr/api/projects/0332EDF4-D2F1-4889-BE74-F28BCADC90F5"
+			<ns1:link ns1:href="https://gtr.ukri.org:443/gtr/api/projects/..."
 				ns1:rel="PROJECT"/>
 			<!-- More project links -->
-			<ns1:link ns1:href="https://gtr.ukri.org:443/gtr/api/persons/88AC732B-1650-42A1-B4B5-82E7BD395962"
+			<ns1:link ns1:href="https://gtr.ukri.org:443/gtr/api/persons/..."
 				ns1:rel="EMPLOYEE"/>
 			<!-- More employee links -->
 		</ns1:links>
@@ -346,15 +346,15 @@ This process needs to be repeated for each type of record: organisations,
 individuals, projects, and project outcomes.
 
 The shell script was written in [Bourne Again Shell
-(Bash)](https://www.gnu.org/software/bash) for the GNU/Linux operating system as I am familiar with both and use them extensively on my personal computers.  
+(Bash)](https://www.gnu.org/software/bash) for the GNU/Linux operating system.
 Additional command-line tools were used, including: xmllint from
 [libxml2](http://xmlsoft.org) for XML manipulation, [GNU
 Awk](https://www.gnu.org/software/gawk) for text processing, and
 [curl](https://curl.haxx.se) for downloading web pages.  
-All this software is free, open source, and fairly popular, meaning that
-anyone who wishes to reproduce or extend this research may do so easily. These
-tools were chosen as they easily enable the automation of the main process of
-experting data: downloading a series of files from the internet.
+Since these software packages are free, open source, and commonly used, the
+research can be relatively easily reproduced and results verified. The tools
+support automation of the main process downloading a series of files from the
+internet.
 
 In order to merge the downloaded XML files an auxiliary program was created.  
 Each page of downloaded records is an individual XML file, with records
@@ -382,7 +382,7 @@ data in that manner that was needed.
 The source code of the main download program is provided in the appendix section
 [ukriDownload], and the auxiliary combing script in [mergeXML].
 
-## Importing data
+## Data importing
 
 Aggregated data is imported into a single relational database management
 system, which will enable analysis through queries composed in the Structured
@@ -400,7 +400,7 @@ from the Gateway to Research database are prefixed with 'gtr'.
 All other tables contain data formed from this project.
 
 The design for data from the Gateway to Research database is based partially on
-the contents of the GtR API manual (@gtrapi2manual), which explains the contents
+the contents of the GtR API manual @gtrapi2manual, which explains the contents
 of the records returned by the API.  
 In occasions where the manual provided inaccurate or incomplete information, the
 XML schema of records and some exported records were visually inspected to
@@ -523,11 +523,9 @@ included:
   this new field for already existing records. These were eventually replaced
   with the `DO NOTHING` action to simply skip over already existing records.
 
-<!-- TODO: reference to details about XPath -->
-
 \newpage
 
-## Cleaning data
+## Data cleaning
 
 Data cleaning is an important step that precedes data analysis: it ensures that
 the data used during analysis is of high quality, including being free of errors
@@ -664,9 +662,9 @@ Mapping is performed by `ParseOrgRole` in [importGtrProjects.sql].
 
 ## Merging duplicate records
 
-As explored by (@winkler2006overview) there are many existing methods for
-identifying duplicate records, most of which involve comparing the similarity of
-text within records.
+As explored by @winkler2006overview and @elmagarmid2006duplicate there are many
+existing methods for identifying duplicate records, most of which involve
+comparing the similarity of text within records.
 
 In order to track the de-duplication process, additional database tables were
 created for each entity being de-duplicated.  
@@ -727,7 +725,7 @@ manual checking: `NULL` indicates no manual check has been performed, `TRUE`
 that the pair were confirmed to be duplicates, and `FALSE` that the pair were
 confirmed to be unique entities.
 
-### Preliminary analysis
+### Entity name analysis
 
 Visual exploration of data revealed small variations with how organisation names
 were entered into the database, as expected of data entered by untrained users.  
@@ -1059,9 +1057,74 @@ Another possible heuristic is to compare the set of organisations that a pair of
 organisations have previously collaborated with, or to compare the research
 topics of projects they have been involved in.
 
-## Visualisations
+# Data analysis & visualisations
 
-### East Midlands network with Gephi
+## Classifying organisations by type
+
+A variety of organisations exist in the database, from universities, local
+councils, medical institutions, to private companies.  
+Through manually exploring the dataset, I found that these can often be
+identified from their names, e.g. universities will almost always have the word
+"University" in their names, and many hospitals will have the word "Hospital".
+
+I decided to create 4 classifications:
+
+- __Academic__: For academic institutions like universities, colleges, and other
+  schools
+- __Medical__: Medical institutions like hospitals, medical research
+  institutions, and other healthcare providers
+- __Private__: Privately owned corporations
+- __Public__: Government bodies and publically-funded institutions
+
+Names are the only data point used when classifying organisations, as they are
+the only related information on organisations contained within the Gateway to
+Research database.  
+Organisation records (and records that are listed as duplicates) are searched
+for particular keywords that indicate their type:
+
+| Type     | Exemplary keywords                              |
+|----------|-------------------------------------------------|
+| Academic | University, College, Academy, Academic          |
+| Medical  | Hospital, NHS, Medical, Health                  |
+| Private  | Limited/LTD, Corporation, Company, Incorporated |
+| Public   | Council, Government, Governorate                |
+
+This type is stored as an additional field within the `orgs` table, which
+contains records which have been de-duplicated and no records classified as
+'junk'.  
+Classification is performed in the procedure [classifyOrgs.sql].  
+After applying this procedure, 21694 of 39578 organisation records (54.8%) were
+given a type.
+
+I attempted to maximise the amount of keywords picked up by manually searching
+for common abbreviations, such as LTD, LLP, and PLC for private limited
+companies. The procedure also takes into account the optional period at the end
+of these abbreviations, such as "Uni." for "University".  
+Another issue is that of keyword overlap: e.g. is Albany Medical College a
+medical institution or an academic one? Through manual research we can discover
+that it is indeed an academic one, but as the procedure classifies medical
+organisations after academic ones, these are categorised as medical.  
+An improvement to this procedure could be to consider combinations of words
+that appear in the outliers, ordered to prioritise these patterns over single
+keywords.
+
+As just under half of organisations remain unclassified, it is clear that using
+names alone is insufficient if the goal is to maximise the number of
+organisations classified.  
+Another improvement would be to refer to a public database such as the UK's
+[Companies House](https://beta.companieshouse.gov.uk) service. This could be
+used to determine both the legal classification and the 'nature of business'
+of an organisation, which may indicate the activities that the organisation
+takes part in.
+The nature of business is reported by the company themselves, and so may not be
+entirely reliable: g.g., the [Nottingham University Hospitals Trust
+Charity](https://beta.companieshouse.gov.uk/company/09978675) lists their nature
+of business as "hospital activities" despite also being an educational
+institution.  
+The categories used by Companies House are provided on their website:
+@companiesHouseSIC.
+
+## East Midlands network with Gephi
 
 I used [Gephi](https://gephi.org), a Java-based graph analysis tool, to plot the
 network of organisations based in the East Midlands region or Nottingham.  
@@ -1198,7 +1261,7 @@ many other organisations in this region. There is also a significant portion
 that does not: these organisations are likely involved in few projects with few
 collaborators.
 
-### East Midlands network with NodeXL
+## East Midlands network with NodeXL
 
 [NodeXL](https://www.smrfoundation.org/nodexl) is an add-on for Microsoft Office
 Excel by the Social Media Research Foundation, originally developed to explore
@@ -1280,74 +1343,7 @@ organisations are involved in more.
 
 \newpage
 
-## Analysis
-
-### Classifying organisations by type
-
-A variety of organisations exist in the database, from universities, local
-councils, medical institutions, to private companies.  
-Through manually exploring the dataset, I found that these can often be
-identified from their names, e.g. universities will almost always have the word
-"University" in their names, and many hospitals will have the word "Hospital".
-
-I decided to create 4 classifications:
-
-- __Academic__: For academic institutions like universities, colleges, and other
-  schools
-- __Medical__: Medical institutions like hospitals, medical research
-  institutions, and other healthcare providers
-- __Private__: Privately owned corporations
-- __Public__: Government bodies and publically-funded institutions
-
-Names are the only data point used when classifying organisations, as they are
-the only related information on organisations contained within the Gateway to
-Research database.  
-Organisation records (and records that are listed as duplicates) are searched
-for particular keywords that indicate their type:
-
-| Type     | Exemplary keywords                              |
-|----------|-------------------------------------------------|
-| Academic | University, College, Academy, Academic          |
-| Medical  | Hospital, NHS, Medical, Health                  |
-| Private  | Limited/LTD, Corporation, Company, Incorporated |
-| Public   | Council, Government, Governorate                |
-
-This type is stored as an additional field within the `orgs` table, which
-contains records which have been de-duplicated and no records classified as
-'junk'.  
-Classification is performed in the procedure [classifyOrgs.sql].  
-After applying this procedure, 21694 of 39578 organisation records (54.8%) were
-given a type.
-
-I attempted to maximise the amount of keywords picked up by manually searching
-for common abbreviations, such as LTD, LLP, and PLC for private limited
-companies. The procedure also takes into account the optional period at the end
-of these abbreviations, such as "Uni." for "University".  
-Another issue is that of keyword overlap: e.g. is Albany Medical College a
-medical institution or an academic one? Through manual research we can discover
-that it is indeed an academic one, but as the procedure classifies medical
-organisations after academic ones, these are categorised as medical.  
-An improvement to this procedure could be to consider combinations of words
-that appear in the outliers, ordered to prioritise these patterns over single
-keywords.
-
-As just under half of organisations remain unclassified, it is clear that using
-names alone is insufficient if the goal is to maximise the number of
-organisations classified.  
-Another improvement would be to refer to a public database such as the UK's
-[Companies House](https://beta.companieshouse.gov.uk) service. This could be
-used to determine both the legal classification and the 'nature of business'
-of an organisation, which may indicate the activities that the organisation
-takes part in.
-The nature of business is reported by the company themselves, and so may not be
-entirely reliable: g.g., the [Nottingham University Hospitals Trust
-Charity](https://beta.companieshouse.gov.uk/company/09978675) lists their nature
-of business as "hospital activities" despite also being an educational
-institution.  
-The categories used by Companies House are provided on their website:
-@companiesHouseSIC.
-
-### Important factors in collaboration
+## Important factors in collaboration
 
 <!--
 Analyse key factors that affect likelihood of collaboration
@@ -1356,7 +1352,7 @@ Analyse key factors that affect likelihood of collaboration
 - pedigree of organisation (cost or amount of previous research)
 -->
 
-#### Amount of research
+### Amount of research
 
 Organisations being involved in more publically-funded projects could imply that
 they are subject experts, and perform higher-quality research than other
@@ -1523,7 +1519,7 @@ projects one organisation has taken part in is a factor in whether
 another organisation decides to collaborate with them, though not a very
 important one.
 
-#### Amount of funding
+### Amount of funding
 
 I expect that the amount of funding an organisations has previously received is
 a strong indicator of the likelihood that another organisations will collaborate
