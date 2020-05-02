@@ -11,10 +11,7 @@ BEGIN
 	SELECT
 		uuid1,
 		uuid2,
-		(SELECT MAX(x) FROM unnest(array[
-			(simFirst + simSur) / 2,
-			(simFirst + simSur + simOther) / 3])
-		AS x)
+		GREATEST((simFirst + simSur) / 2, (simFirst + simSur + simOther) / 3)
 	FROM (SELECT
 			p1.personUuid                            AS uuid1,
 			p2.personUuid                            AS uuid2,
