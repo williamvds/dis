@@ -187,19 +187,14 @@ being involved in the project.
 
 ## Research questions
 
-The following questions were identified as being of particular interest to The
-Decision Project, or as potential interesting analysis from preliminary research
-and initial insights gained by exploring the available data.
+The following questions were identified as potential interesting analysis from
+preliminary research and initial insights gained by exploring the available
+data.
 
-- Which businesses are involved in research and development of specific
-  technologies? Which businesses are the up-and-coming participants in the
-  innovation ecosystem?
+- What is the structure of the ecosystem of publically-funded research - how
+  does it change over time?
 - What are the significant factors that influence collaboration between
   organisations?
-- Is it possible to predict the change in popularity of specific research
-  subjects over time?
-- Is it possible to predict how close technologies are to commercialisations and
-  market adoption?
 
 ## Technical approach
 
@@ -528,11 +523,10 @@ included:
 
 ## Data cleaning
 
-
 Data cleaning is required to  ensure that the data used during analysis is of
 high quality, i.e. free of errors and sufficient for the planned analysis. The
 use of low quality data negatively impacts analysis, resulting in inaccuracies
-and less useful outomces (@rahm2000data).
+and less useful outcomes (@rahm2000data).
 
 The Gateway to Research data is entered by researchers and individuals involved
 in the grant funding process. As a result, human error can result in erroneous
@@ -1127,7 +1121,7 @@ used to determine both the legal classification and the 'nature of business'
 of an organisation, which may indicate the activities that the organisation
 takes part in.
 The nature of business is reported by the company themselves, and so may not be
-entirely reliable: g.g., the [Nottingham University Hospitals Trust
+entirely reliable: e.g., the [Nottingham University Hospitals Trust
 Charity](https://beta.companieshouse.gov.uk/company/09978675) lists their nature
 of business as "hospital activities" despite also being an educational
 institution.  
@@ -1354,13 +1348,6 @@ Limited](https://www.intelligent-energy.com) and partnered with Frost
 Electronics Limited.
 
 ## Important factors in collaboration
-
-<!--
-Analyse key factors that affect likelihood of collaboration
-- physical location
-- previous collaboration (individuals or organisation)
-- pedigree of organisation (cost or amount of previous research)
--->
 
 ### Amount of research
 
@@ -1717,9 +1704,119 @@ factor.
 
 # Summary and Reflections
 
-## Contributions and Reflections
+## Conclusions
 
-## Project Management
+- What is the structure of the ecosystem of publically-funded research - how
+  does it change over time?
+
+Through aggregate analysis and specific analysis of the East Midlands network,
+a common pattern appears within the ecosystem wherein a few organisations and
+projects receive the vast majority of funding from UKRI and its subsidiaries.
+This pattern applies to all types of organisation, though academic and
+privately-owned organisations are likelier to be among these top researchers.  
+Private organisations represent the overwhelming majority of all those taking
+part in this research.
+
+Analysis of the East Midlands network reveals that the top researching
+organisations form hubs of research, wherein many organisations collaborate with
+solely this top organisation.  
+Comparing two different time periods in this network there is not much change
+within the ecosystem in terms of distribution of collaboration among the
+involved organisation. However, while the top academic and medical organisations
+remain at the top, the private organisations involved vary over time. This
+suggests private organisations do not always maintain the amount of research
+they are involved with as consistently as these other types of organisations.
+
+- What are the significant factors that influence collaboration between
+  organisations?
+
+Further aggregate analysis revealed that organisations are more likely to
+collaborate with the top organisation when ranked by either amount of funding
+received or the number of projects involved.  
+This suggests a relationship between these attributes and one organisation's
+decision to collaborate with these top organisations, perhaps due to this
+indicating the quality or value of the research they engage in.
+
+## Contributions
+
+The project succeeded in going through the entire process of data warehousing
+and analysis for a set of open data, as originally intended.  
+Research did not bring up any other works that focused entirely on UKRI's
+Gateway to Research database, and explored the dataset in its entirety. Previous
+research involved creating systems around such open data, including EnAKTing
+(@shadbolt2012linked) and Dbpedia (@auer2007dbpedia). While this project did not
+go as far as creating an entire platform for users to perform their own
+analysis, I believe some useful analyses were performed and that it provides a
+valuable starting point from which to create such a platform.
+
+By applying existing computational methods to an entire dataset in this project,
+I believe it provides a useful case study that supports future research that
+applies the chosen methods on open datasets. This includes difficulties
+encountered in applying them, methods for circumventing or alleviating these
+difficulties, and a data point from which to gauge their efficacy or
+usefulness.
+
+I also believe the projects provides additional insights into possible
+improvements to open data platforms that would make similar future research
+easier. Details provided about de-duplication and schema merging
+performed during data cleaning could be applied by these open data platforms.  
+E.g. by showing similar existing records in data entry forms in order to avoid
+the creation of duplicate records.
+The project found overlapping semantics in the schema used by the Gateway to
+Research database, which may be a result of it encapsulating data from several
+subsidiary organisations. UKRI could apply these findings by reviewing the
+existing schema and applying changes to reduce this overlap.  
+Lack of documentation about the Gateway to Research's schema required manual
+work in exploring the structure of the dataset in order to convert it into a
+relational schema that could be implemented by standard relational databases.
+Similarly, documentation about the contents of the database tended to be
+outdated or lacking in detail. In order to support use of their database by
+researchers, improving this documentation is a step that UKRI could take.
+
+## Reflections
+
+What the project achieved differs from the original plan, mostly due to the time
+constrictions of this project.  
+While the data warehousing tasks were achieved in some capacity, the originally
+planned analyses had to be cut down in order for the project to be completed on
+time. This includes using correlation analysis and machine learning for
+predicting possible collaboration, classifying technologies being researched,
+and estimating the market readiness of those technologies.
+
+Time spent on individual tasks was typically longer than planned (with the plan
+laid out in the Gantt chart below). This was both due to the allocated time
+being insufficient, and due to less focus being put on the project than it
+required during the earlier periods of the project.
+This is main reason for reducing the amount of analysis within the project.  
+Initially The Decision Project (TDP), a business consultancy, intended to have a
+more active part in the project by providing additional contextual data about
+organisations within their own datasets. This would have opened up more
+possibilities for analysing the impact of research on businesses, but required
+more work be done to incorporate these datasets into the database formed in this
+project.
+
+While I planned to perform tasks in the order specified in the [Methodology], I
+found myself continually going back to adjust previously done work, such as
+adjusting the schema or de-duplication procedures.
+This made keeping track of the pace of the project to be difficult, resulting in
+tasks and priorities continually shifting as the project progressed.  
+I ceased updating the work plan shown in the Gantt chart, as well not
+tracking tasks with [Taskwarrior](https://taskwarrior.org) as originally
+planned - I found having to do this regularly as plans shifted both unproductive
+and demoralising. Instead of setting fixed dates by which to accomplish certain
+things, I would have preferred to use a more agile project management
+methodology such as Kanban @ahmad2013kanban.
+In such a method, the tasks that compose the project could be laid out
+individually, prioritised, and their dependencies linked. This would allow the
+project plan to be flexibly adjusted when tasks take a different amount of time
+to complete than predicted.
+
+I also regret not using version control software from the beginning of the
+project. I believe it would've provided additional help in managing the pace of
+work and could have been paired nicely with a Kanban system - where logged
+changes work towards completing individual tasks.
+A version control system was applied to the project very late, where most of the
+benefits were in the ability to tracking changes in documentation.
 
 \begin{figure}[H]
 	\centering
