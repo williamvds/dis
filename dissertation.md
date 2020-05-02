@@ -288,7 +288,7 @@ historical data.
 
 \newpage
 
-# Data acquisition & preparation
+# Data acquisition and preparation
 
 ## Data aggregation
 
@@ -1061,7 +1061,7 @@ Another possible heuristic is to compare the set of organisations that a pair of
 organisations have previously collaborated with, or to compare the research
 topics of projects they have been involved in.
 
-# Data analysis & visualisations
+# Data analysis and visualisations
 
 ## Classifying organisations by type
 
