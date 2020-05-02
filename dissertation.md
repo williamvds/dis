@@ -1124,9 +1124,9 @@ institution.
 The categories used by Companies House are provided on their website:
 @companiesHouseSIC.
 
-## East Midlands network with Gephi
+## East Midlands network analysis and visualisation with Gephi
 
-I used [Gephi](https://gephi.org), a Java-based graph analysis tool, to plot the
+[Gephi](https://gephi.org), a Java-based graph analysis tool, was used to plot the
 network of organisations based in the East Midlands region or Nottingham.  
 This software was chosen as it is free and open source, and so it costs nothing
 to use. Documentation also suggested it was easy to use, which would enable me
@@ -1135,10 +1135,10 @@ Through research I also found that it includes several features that enable
 network analysis and visualisation, the possibilities of which I was keen to
 apply to explore.  
 Organisations were selected if they had 'East Midlands' specified as their
-region.
+region, and had an active projected within the years 2002-2008.
 
 Limiting the dataset in this manner resulted in analysis being much faster to
-perform, as only 1226 of 39578 organisations match this criteria. Fewer records
+perform, as only 238 of 39578 organisations match these criteria. Fewer records
 means less computational power is needed to manipulate the dataset in Gephi.  
 While Gephi is able to load the entire dataset if the Java virtual machine is
 allowed to use more system memory (e.g. by setting `_JAVA_OPTIONS="-Xms1024m
@@ -1148,64 +1148,7 @@ I also found that limiting the dataset significantly increased the legibility of
 the resulting graph, as having fewer nodes and edges means less overlap. With
 all nodes and edges visible, it was impossible to distinguish individual edges
 due to the massive number of them - 283197 in total. In the filtered dataset
-this number is reduced to a much more manageable 4679.
-
-In the graph, nodes represent organisations, and edges represent projects that
-both organisations were involved in.  
-Data was exported from the database using [scripts/eastMidlandsGraphGephi.sql],
-then imported into Gephi through the [import
-spreadsheet](https://github.com/gephi/gephi/wiki/Import-CSV-Data) wizard.
-This includes organisation records (used as the nodes) and projects that pairs
-of those organisations were both involved in (used as the edges).
-Organisation records were inspected for duplicates by sorting by name, and some
-were manually merged within Gephi.  
-In order to make the network explorable through different periods of time, the
-start and end date of projects were merged to create the interval during which
-the edges apply.
-
-Nodes were filtered to those with at least one connection.  
-Edges were filtered to projects that were active within the years 2002-2008,
-then Yifan Yu's propertional graph layout algorithm (@yhugraph) was applied.
-This layout algorithm clusters related nodes while minimising the amount of edge
-crossing. Clustering is a result of edges causing connected vertices to attract
-one another while all vertices repel each other.  
-Edges were scaled according to the amount spent on projects between those
-organisations.
-Nodes were scaled by their (unfiltered) total number of connections, and
-coloured according to their type:
-
-- Purple: Academic
-- Blue: Private
-- Green: Medical
-- Gray: Unknown
-
-Nodes with no connections  were removed, minor repositioning was performed
-to make the graph visualisation more compact, and some nodes were adjusted
-to fix overlapping labels.
-
-The resulting visualisation can be found in figure \ref{fig:midlands2002_2008}.
-
-The network shows academic organisations being involved in the majority of
-projects in this period & area, having many connections to other organisations
-through projects. Among these are the University of Nottingham, Loughborough
-University, and Loughborough College.  
-Medical organisations are also heavily involved in research, including the
-University Hospitals of Nottingham and Leicester. These have formed large hubs
-of connected organisations, showing the amount of research and variety of
-organisations they are involved in.  
-A few private and other classes of organisations stand out including [PERA
-Innovation](https://www.perainternational.com/about), a research association for
-the manufacturing sector, and [Experian](https://www.experian.com), a credit
-reporting company. Both have a significant number of connections, and spend a
-lot on research.
-
-The vast majority of organisations are connected to a single contiguous graph,
-but there are a few outliers that reside in their own disjoint networks, shown
-in the bottom left of the graph. These include [Sun
-Chemical](https://www.sunchemical.com) who produce "printing inks, coatings and
-supplies".  
-This suggests these organisations are in niche industries or involved in
-research that does not benefit most organisations.
+this number is reduced to a much more manageable 940.
 
 While Gephi supports importing data directly from a database through queries,
 I encountered difficulties when attempting to use this feature with long queries
@@ -1214,7 +1157,17 @@ I instead opted to create procedures that exported the needed data to Comma
 Separated Values (CSV) files, a common plaintext format, and then imported these
 files manually into Gephi.
 
-Gephi also allows some graph properties to be analysed, including the degree
+Data was exported from the database using [scripts/eastMidlandsGraphGephi.sql],
+then imported into Gephi through the [import
+spreadsheet](https://github.com/gephi/gephi/wiki/Import-CSV-Data) wizard.
+This includes organisation records (used as the nodes) and projects that pairs
+of those organisations were both involved in (used as the edges).
+Organisation records were inspected for duplicates by sorting by name, and some
+were manually merged within Gephi.  
+
+### Analysis
+
+Gephi allows some graph properties to be analysed, including the degree
 distribution of nodes and (weighted) clustering coefficient.
 
 The degree distribution shown in figure \ref{fig:midlands2002_2008Degree} is
@@ -1261,7 +1214,52 @@ many other organisations in this region. There is also a significant portion
 that does not: these organisations are likely involved in few projects with few
 collaborators.
 
-## East Midlands network with NodeXL
+### Visualisation
+
+Nodes were filtered to those with at least one connection, then Yifan Yu's
+proportional graph layout algorithm (@yhugraph) was applied.
+This layout algorithm clusters related nodes while minimising the amount of edge
+crossing. Clustering is a result of edges causing connected vertices to attract
+one another while all vertices repel each other.  
+Edges were scaled according to the amount spent on projects between those
+organisations.
+Nodes were scaled by their (unfiltered) total number of connections, and
+coloured according to their type:
+
+- Purple: Academic
+- Blue: Private
+- Green: Medical
+- Gray: Unknown
+
+Nodes with no connections  were removed, minor repositioning was performed
+to make the graph visualisation more compact, and some nodes were adjusted
+to fix overlapping labels.
+
+The resulting visualisation can be found in figure \ref{fig:midlands2002_2008}.
+
+The network shows academic organisations being involved in the majority of
+projects in this period & area, having many connections to other organisations
+through projects. Among these are the University of Nottingham, Loughborough
+University, and Loughborough College.  
+Medical organisations are also heavily involved in research, including the
+University Hospitals of Nottingham and Leicester. These have formed large hubs
+of connected organisations, showing the amount of research and variety of
+organisations they are involved in.  
+A few private and other classes of organisations stand out including [PERA
+Innovation](https://www.perainternational.com/about), a research association for
+the manufacturing sector, and [Experian](https://www.experian.com), a credit
+reporting company. Both have a significant number of connections, and spend a
+lot on research.
+
+The vast majority of organisations are connected to a single contiguous graph,
+but there are a few outliers that reside in their own disjoint networks, shown
+in the bottom left of the graph. These include [Sun
+Chemical](https://www.sunchemical.com) who produce "printing inks, coatings and
+supplies".  
+This suggests these organisations are in niche industries or involved in
+research that does not benefit most organisations.
+
+## East Midlands network analysis and visualisation with NodeXL
 
 [NodeXL](https://www.smrfoundation.org/nodexl) is an add-on for Microsoft Office
 Excel by the Social Media Research Foundation, originally developed to explore
@@ -1284,6 +1282,23 @@ This resulted in 327 nodes and 806 edges being selected for this network.
 
 The procedure for exporting this data is provided in
 [eastMidlandsGraphNodeXL.sql].
+
+### Analysis
+
+In the free version of NodeXL, the available analyses are greatly limited. While
+it supports several algorithms Gephi also supports (such as clustering
+coefficients and eigenvector centrality), these are limited to the paid version.
+One available analysis available is degree distribution, which is shown in
+figure \ref{fig:midlands2005_2010Degree}.  
+Just as in the 2005-2008 network, the vast majority of organisations are
+involved in only a few collaborations, with higher amounts of collaboration
+being increasingly rare.
+Degrees above 20 seem to have become rarer in the 2005-2010 time range, but the
+top degree is 172 compared to 2002-2008's 114. This suggests a lower amount of
+collaboration from most organisations in this later time period, but the top
+organisations are involved in more.
+
+### Visualisation
 
 Nodes were scaled by the number of project connections they had within that time
 period, and edges scaled by how much was spent by either organisation on that
@@ -1327,21 +1342,6 @@ into to [develop hydrogen fuel cell
 systems](https://gtr.ukri.org/projects?ref=113057), led by [Intelligent Energy
 Limited](https://www.intelligent-energy.com) and partnered with Frost
 Electronics Limited.
-
-In the free version of NodeXL, the available analyses are greatly limited. While
-it supports several algorithms Gephi also supports (such as clustering
-coefficients and eigenvector centrality), these are limited to the paid version.
-One available analysis available is degree distribution, which is shown in
-figure \ref{fig:midlands2005_2010Degree}.  
-Just as in the 2005-2008 network, the vast majority of organisations are
-involved in only a few collaborations, with higher amounts of collaboration
-being increasingly rare.
-Degrees above 20 seem to have become rarer in the 2005-2010 time range, but the
-top degree is 172 compared to 2002-2008's 114. This suggests a lower amount of
-collaboration from most organisations in this later time period, but the top
-organisations are involved in more.
-
-\newpage
 
 ## Important factors in collaboration
 
