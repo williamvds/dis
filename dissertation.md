@@ -421,9 +421,9 @@ in the appendix: [importGtrOrgs.sql], [importGtrPersons.sql],
 [importGtrProjects.sql], and [importGtrOutcomes.sql].
 
 The SQL procedures extract individual data points from records through XPath
-queries against the XML data. Similarly to the design of the database schema,
-these were developed through a combination of inspecting the XML schema as well
-as some extracted records.  
+queries against the XML data @w3cXPath. Similarly to the design of the
+database schema, these were developed through a combination of inspecting the
+XML schema as well as some extracted records.  
 Once again, visual inspection during this process resulted in additional
 adjustments being made to the database design, including adding new fields to
 existing tables and creating new ones where necessary, e.g. the `gtrTopics`
