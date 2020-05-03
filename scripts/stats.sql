@@ -16,6 +16,16 @@ EXCEPTION
 	WHEN duplicate_object THEN null;
 END $$; -- BEGIN
 
+CREATE TEMP TABLE IF NOT EXISTS orgTypeCounts AS
+SELECT
+	type AS type,
+	COUNT(*) AS count
+FROM 
+	orgs
+GROUP BY type;
+
+\copy (SELECT * FROM orgTypeCounts) TO data/orgTypeCounts.csv (FORMAT CSV, HEADER)
+
 -- Similarity distributions of organisations
 CREATE OR REPLACE
 FUNCTION OrgSimDist(

@@ -872,7 +872,8 @@ The results are shown in the following plot:
 		ylabel=Number of pairs,
 		enlargelimits=0.15,
 		ybar=5pt,
-		bar width=9pt,nodes near coords,
+		bar width=9pt,
+		nodes near coords,
 		point meta=y,
 	]
 		\addplot coordinates {
@@ -1111,6 +1112,37 @@ medical organisations after academic ones, these are categorised as medical.
 An improvement to this procedure could be to consider combinations of words
 that appear in the outliers, ordered to prioritise these patterns over single
 keywords.
+
+\pgfplotstableread[col sep=comma]{data/orgTypeCounts.csv}\data
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+		symbolic x coords={Academic, Medical, Public, Private, Unknown},
+		xtick=data,
+		xticklabel style={rotate=90},
+		ylabel=No. of organisations,
+		y label style={at={(axis description cs:-0.1,.5)}},
+		minor tick num=0,
+		scaled y ticks = false,
+		ybar=5pt,
+		bar width=9pt,
+		enlargelimits=0.15,
+		nodes near coords,
+	]
+		\addplot+ table [
+			x=type,
+			y=count,
+		] {\data};
+	\end{axis}
+	\end{tikzpicture}
+	\caption{Distribution of organisations within the UKRI dataset, grouped by
+		type. The type is determined using keywords contained in their names,
+		such as 'Limited', or 'University'.
+		54.8\% of records were grouped, with the remainder given the 'Unknown'
+		type.}
+	\label{fig:orgTypeCounts}
+\end{figure}
 
 As just under half of organisations are not assigned a type, it is clear that
 using names alone is insufficient if the goal is to maximise the number of
