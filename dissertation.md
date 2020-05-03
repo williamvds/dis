@@ -484,7 +484,9 @@ included:
 	<!-- ... -->
 	<ns2:participantValues>
 		<ns2:participant>
-		<ns2:organisationId>AAC0E6BF-AC85-4577-AA5A-2E8725FFAF7B</ns2:organisationId>
+		<ns2:organisationId>
+			AAC0E6BF-AC85-4577-AA5A-2E8725FFAF7B
+		</ns2:organisationId>
 		<ns2:organisationName>Wsp UK Limited</ns2:organisationName>
 		<ns2:role>LEAD_PARTICIPANT</ns2:role>
 		<ns2:projectCost>100000.0</ns2:projectCost>
