@@ -614,7 +614,7 @@ to the invalid records collection.
 As a result, 5213 of 47822 (10.9%) organisation records were marked as invalid
 records.
 
-### Organisation roles
+### Merging organisation roles enumerations
 
 Through visual inspection, the enumerations that specify an organisation's role
 in a project (in the `gtrProjectOrgs` table) appeared to some duplicates. This
@@ -1063,7 +1063,7 @@ topics of projects they have been involved in.
 
 # Data analysis and visualisations
 
-## Classifying organisations by type
+## Grouping organisations by type
 
 A variety of organisations exist in the database, from universities, local
 councils, medical institutions, to private companies.  
@@ -1071,7 +1071,7 @@ Through manually exploring the dataset, I found that these can often be
 identified from their names, e.g. universities will almost always have the word
 "University" in their names, and many hospitals will have the word "Hospital".
 
-I decided to create 4 classifications:
+I decided to create 4 groups:
 
 - __Academic__: For academic institutions like universities, colleges, and other
   schools
@@ -1080,7 +1080,7 @@ I decided to create 4 classifications:
 - __Private__: Privately owned corporations
 - __Public__: Government bodies and publically-funded institutions
 
-Names are the only data point used when classifying organisations, as they are
+Names are the only data point used when grouping organisations, as they are
 the only related information on organisations contained within the Gateway to
 Research database.  
 Organisation records (and records that are listed as duplicates) are searched
@@ -1094,9 +1094,9 @@ for particular keywords that indicate their type:
 | Public   | Council, Government, Governorate                |
 
 This type is stored as an additional field within the `orgs` table, which
-contains records which have been de-duplicated and no records classified as
+contains records which have been de-duplicated and no records determined to be
 invalid.  
-Classification is performed in the procedure [classifyOrgs.sql].  
+Grouping is performed in the procedure [classifyOrgs.sql].  
 After applying this procedure, 21694 of 39578 organisation records (54.8%) were
 given a type.
 
@@ -1106,15 +1106,15 @@ companies. The procedure also takes into account the optional period at the end
 of these abbreviations, such as "Uni." for "University".  
 Another issue is that of keyword overlap: e.g. is Albany Medical College a
 medical institution or an academic one? Through manual research we can discover
-that it is indeed an academic one, but as the procedure classifies medical
-organisations after academic ones, these are categorised as medical.  
+that it is indeed an academic one, but as the procedure sets the group of
+medical organisations after academic ones, these are categorised as medical.  
 An improvement to this procedure could be to consider combinations of words
 that appear in the outliers, ordered to prioritise these patterns over single
 keywords.
 
-As just under half of organisations remain unclassified, it is clear that using
-names alone is insufficient if the goal is to maximise the number of
-organisations classified.  
+As just under half of organisations are not assigned a type, it is clear that
+using names alone is insufficient if the goal is to maximise the number of
+organisations grouped.  
 Another improvement would be to refer to a public database such as the UK's
 [Companies House](https://beta.companieshouse.gov.uk) service. This could be
 used to determine both the legal classification and the 'nature of business'
@@ -1780,7 +1780,7 @@ constrictions of this project.
 While the data warehousing tasks were achieved in some capacity, the originally
 planned analyses had to be cut down in order for the project to be completed on
 time. This includes using correlation analysis and machine learning for
-predicting possible collaboration, classifying technologies being researched,
+predicting possible collaboration, identifying technologies being researched,
 and estimating the market readiness of those technologies.
 
 Time spent on individual tasks was typically longer than planned (with the plan
