@@ -191,7 +191,7 @@ The following questions were identified as potential interesting analysis from
 preliminary research and initial insights gained by exploring the available
 data.
 
-- What is the structure of the ecosystem of publically-funded research - how
+- What is the structure of the ecosystem of publicly funded research - how
   does it change over time?
 - What are the significant factors that influence collaboration between
   organisations?
@@ -1027,7 +1027,7 @@ Name trigram similarity is an effective heuristic for detecting duplicate
 organisations, as these tend to use more unique names to distinguish themselves.
 The same is not true of people: due to the wide re-use of names within
 populations, names alone cannot be used to uniquely identify a real individual.
-In these cases additional contextual information must be used to ascertain
+In these cases, additional contextual information must be used to ascertain
 duplication, such as an individual's employer.
 
 Using name comparison is more effective when common variations of the same words
@@ -1045,7 +1045,7 @@ Limitations to these heuristics include:
 
 - Incomplete records: Many omitted address information, meaning solely name
   comparison could be performed.
-- User error: Postcodes being specified in the incorrect field, or differing by
+- User error: Postcodes being specified in the incorrect field or differing by
   a couple of characters.
 - Limited amount of information: Analysing sets of organisations collaborated
   with is less reliable for records with few projects associated with them.
@@ -1054,8 +1054,8 @@ Public government records could be queried to search previous names and
 addresses of organisations. These combinations of names and addresses could be
 compared between pairs of records to provide additional information to the
 de-duplication process.  
-The dates that these records were created is also provided, and could be used to
-identify what a particular organisation was named and what address they were
+The dates that these records were created is also provided and could be used to
+identify what an organisation was named and what address they were
 using at a certain point in time.  
 This information could provide more confidence in the decisions made during the
 de-duplication process.
@@ -1081,13 +1081,13 @@ I decided to create 4 groups:
 - __Medical__: Medical institutions like hospitals, medical research
   institutions, and other healthcare providers
 - __Private__: Privately owned corporations
-- __Public__: Government bodies and publically-funded institutions
+- __Public__: Government bodies and publicly funded institutions
 
 Names are the only data point used when grouping organisations, as they are
 the only related information on organisations contained within the Gateway to
 Research database.  
 Organisation records (and records that are listed as duplicates) are searched
-for particular keywords that indicate their type:
+for keywords that indicate their type:
 
 | Type     | Exemplary keywords                              |
 |----------|-------------------------------------------------|
@@ -1151,7 +1151,7 @@ using names alone is insufficient if the goal is to maximise the number of
 organisations grouped.  
 Another improvement would be to refer to a public database such as the UK's
 [Companies House](https://beta.companieshouse.gov.uk) service. This could be
-used to determine both the legal classification and the 'nature of business'
+used to determine both the legal classification and the "nature of business"
 of an organisation, which may indicate the activities that the organisation
 takes part in.
 The nature of business is reported by the company themselves, and so may not be
@@ -1164,7 +1164,7 @@ The categories used by Companies House are provided on their website:
 
 ## East Midlands network analysis and visualisation with Gephi
 
-[Gephi](https://gephi.org), a Java-based graph analysis tool, was used to plot the
+[Gephi](https://gephi.org) is a Java-based graph analysis tool, and was used to plot the
 network of organisations based in the East Midlands region or Nottingham.  
 This software was chosen as it is free and open source, and so it costs nothing
 to use. Documentation also suggested it was easy to use, which would enable me
@@ -1173,11 +1173,11 @@ Through research I also found that it includes several features that enable
 network analysis and visualisation, the possibilities of which I was keen to
 apply to explore.  
 Organisations were selected if they had 'East Midlands' specified as their
-region, and had an active projected within the years 2002-2008.
+region and had an active projected within the years 2002 and 2008.
 
 Limiting the dataset in this manner resulted in analysis being much faster to
 perform, as only 238 of 39578 organisations match these criteria. Fewer records
-means less computational power is needed to manipulate the dataset in Gephi.  
+mean less computational power is needed to manipulate the dataset in Gephi.  
 While Gephi is able to load the entire dataset if the Java virtual machine is
 allowed to use more system memory (e.g. by setting `_JAVA_OPTIONS="-Xms1024m
 -Xmx10000m"`), adjusting the layout, filtering, or calculating statistics still
@@ -1215,10 +1215,10 @@ indicating that they are involved in only a few collaborations.
 Frequencies drop dramatically past degree 10, and very few organisations have
 the highest degrees, and these are particularly sparse within the distribution.
 This supports the expectation that there are a few organisations that make up
-the vast majority of research and collaboration, and that most are only involved
-in a few projects.  
+the most of research and collaboration, and that most are only involved in a few
+projects.  
 As the distribution is similar to that of the database as a whole, this suggests
-that publically-funded research in the East Midlands region does not stand out
+that publicly funded research in the East Midlands region does not stand out
 significantly from other regions in terms of amount of research and its
 distribution.
 
@@ -1261,7 +1261,7 @@ crossing. Clustering is a result of edges causing connected vertices to attract
 one another while all vertices repel each other.  
 Edges were scaled according to the amount spent on projects between those
 organisations.
-Nodes were scaled by their (unfiltered) total number of connections, and
+Nodes were scaled by their (unfiltered) total number of connections and
 coloured according to their type:
 
 - Purple: Academic
@@ -1286,10 +1286,10 @@ organisations they are involved in.
 A few private and other classes of organisations stand out including [PERA
 Innovation](https://www.perainternational.com/about), a research association for
 the manufacturing sector, and [Experian](https://www.experian.com), a credit
-reporting company. Both have a significant number of connections, and spend a
+reporting company. Both have a significant number of connections and spend a
 lot on research.
 
-The vast majority of organisations are connected to a single contiguous graph,
+Almost all organisations are connected to a single contiguous graph,
 but there are a few outliers that reside in their own disjoint networks, shown
 in the bottom left of the graph. These include [Sun
 Chemical](https://www.sunchemical.com) who produce "printing inks, coatings and
@@ -1328,11 +1328,11 @@ it supports several algorithms Gephi also supports (such as clustering
 coefficients and eigenvector centrality), these are limited to the paid version.
 One available analysis available is degree distribution, which is shown in
 figure \ref{fig:midlands2005_2010Degree}.  
-Just as in the 2005-2008 network, the vast majority of organisations are
+Just as in the 2005 to 2008 network, the vast majority of organisations are
 involved in only a few collaborations, with higher amounts of collaboration
 being increasingly rare.
-Degrees above 20 seem to have become rarer in the 2005-2010 time range, but the
-top degree is 172 compared to 2002-2008's 114. This suggests a lower amount of
+Degrees above 20 seem to have become rarer in the 2005 to 2010 time range, but the
+top degree is 172 compared to 2002 to 2008's 114. This suggests a lower amount of
 collaboration from most organisations in this later time period, but the top
 organisations are involved in more.
 
@@ -1342,7 +1342,7 @@ Nodes were scaled by the number of project connections they had within that time
 period, and edges scaled by how much was spent by either organisation on that
 project.  
 I applied the Fruchterman-Reingold layout algorithm (@fruchterman1991graph),
-which takes into account edges in positioning. By adjusting the configuration of
+which considers edges in positioning. By adjusting the configuration of
 the repulsive force to 25.0 and number of iterations to 25, this resulted in
 nodes with greater degrees being positioned towards the centre of the graph, and
 other nodes being placed towards the periphery.  
@@ -1364,14 +1364,14 @@ The resulting visualisation can be found in figure \ref{fig:midlands2005_2010}.
 
 Academic and Medical institutions are shown towards the centre of the graph and
 with high degrees, indicating they are heavily involved in collaborative
-research, as one might expect. This pattern is also visible in the 2002-2008
+research, as one might expect. This pattern is also visible in the 2002 to 2008
 network. This graph also shows that most academic organisations have higher
 degrees than most, hence are involved in more collaboration.  
 With the exception of PERA Innovation, all the organisations mentioned in the
-analysis of the 2002-2008 network also appear as nodes with high degree in this
+analysis of the 2002 to 2008 network also appear as nodes with high degree in this
 new graph. This suggests the remaining organisations have maintained the large
 amount of research they perform, whereas PERA Innovation is less involved in
-publically-funded research within the East Midlands region.
+publicly funded research within the East Midlands region.
 
 Some particularly notable edges appear near the centre of the graph and travel
 downwards to the bottom.  
@@ -1385,7 +1385,7 @@ Electronics Limited.
 
 ### Amount of research
 
-Organisations being involved in more publically-funded projects could imply that
+Organisations being involved in more publicly funded projects could imply that
 they are subject experts, and perform higher-quality research than other
 organisations. If this is the case, other organisations would be more interested
 in collaborating with them so that they can take advantage of the outcomes of
@@ -1470,7 +1470,7 @@ similar pattern: the vast majority are involved with only one or two projects:
 	\end{tikzpicture}
 	\caption{Cumulative distribution of all organisations in the UKRI database
 		by percentile, ranked by the total number of projects they are involved in.
-		The number of organisations are broken down by their type.
+		The organisation counts are broken down by their type.
 		E.g. the red vertical line indicates just under 20,000 organisations are
 		ranked at the 40th percentile or below.
 		Generated with \texttt{OrgProjectPercentileDist} in
@@ -1479,7 +1479,7 @@ similar pattern: the vast majority are involved with only one or two projects:
 \end{figure}
 
 By exploring the relationship between project involvement percentiles and
-collaboration, we can see that the vast majority of organisations have
+collaboration, we can see that the majority of organisations have
 collaborated with organisations of lower percentile ranks:
 
 \pgfplotstableread[col sep=comma]{data/orgProjectPercentileCollab.csv}\data
@@ -1542,7 +1542,7 @@ collaborated with organisations of lower percentile ranks:
 	\label{fig:orgProjectPercentileCollab}
 \end{figure}
 
-While there are a large number of organisations that have collaborated with
+While there are many organisations that have collaborated with
 lower ranked organisations, we still see a sharp increase past the 90th
 percentile. This indicates a similar proportion of organisations have only
 collaborated with the top rank researchers, suggesting that the number of
@@ -1552,7 +1552,7 @@ important one.
 
 ### Amount of funding
 
-I expect that the amount of funding an organisations has previously received is
+I expect that the amount of funding an organisation has previously received is
 a strong indicator of the likelihood that another organisations will collaborate
 with them.  
 Hypothetically, the UKRI would provide more funding to organisations who are the
@@ -1613,7 +1613,7 @@ projects.
 
 The percentile distribution is very similar for the total funding received by
 both projects and organisations. Both curves show that the top 20% of
-organisations and projects account for the vast majority of funding received
+organisations and projects account for the majority of funding received
 from UKRI.
 
 \pgfplotstableread[col sep=comma]{data/orgFundingPercentileCollab.csv}\data
@@ -1726,21 +1726,21 @@ positive correlation between the funding percentile and number of projects these
 organisations are involved in.  
 A significant majority of projects involve organisations above the 90th
 percentile, suggesting that these organisations are also the most prolific in
-their involvement in publically-funded research.
+their involvement in publicly funded research.
 
 These analyses show that organisations are more likely to have collaborated with
 only the most funded organisations, and that there are many projects involving
 only the most funded organisations.  
 While it is impossible to prove causality from this, the results support the
 theory that, when an organisation is deciding whether to collaborate with
-another, the total research funding that other organisation has received is a
-factor.
+another, the total research funding which that other organisation has received
+is a factor.
 
 # Summary and Reflections
 
 ## Conclusions
 
-- What is the structure of the ecosystem of publically-funded research - how
+- What is the structure of the ecosystem of publicly funded research - how
   does it change over time?
 
 Through aggregate analysis and specific analysis of the East Midlands network,
@@ -1776,7 +1776,7 @@ indicating the quality or value of the research they engage in.
 The project succeeded in going through the entire process of data warehousing
 and analysis for a set of open data, as originally intended.  
 Research did not bring up any other works that focused entirely on UKRI's
-Gateway to Research database, and explored the dataset in its entirety. Previous
+Gateway to Research database and explored the dataset in its entirety. Previous
 research involved creating systems around such open data, including EnAKTing
 (@shadbolt2012linked) and Dbpedia (@auer2007dbpedia). While this project did not
 go as far as creating an entire platform for users to perform their own
@@ -1812,7 +1812,7 @@ researchers, improving this documentation is a step that UKRI could take.
 What the project achieved differs from the original plan, mostly due to the time
 constrictions of this project.  
 While the data warehousing tasks were achieved in some capacity, the originally
-planned analyses had to be cut down in order for the project to be completed on
+planned analyses had to be cut down for the project to be completed on
 time. This includes using correlation analysis and machine learning for
 predicting possible collaboration, identifying technologies being researched,
 and estimating the market readiness of those technologies.
@@ -1824,7 +1824,7 @@ required during the earlier periods of the project.
 This is main reason for reducing the amount of analysis within the project.  
 Initially The Decision Project (TDP), a business consultancy, intended to have a
 more active part in the project by providing additional contextual data about
-organisations within their own datasets. This would have opened up more
+organisations within their own datasets. This would have provided more
 possibilities for analysing the impact of research on businesses, but required
 more work be done to incorporate these datasets into the database formed in this
 project.
@@ -2308,7 +2308,7 @@ Projects that are related to one another in some way.
 	\centering
 	\includegraphics[width=0.7\textwidth]{midlands2002-2008/degree.png}
 	\caption{Degree distribution of the East Midlands funding network
-		(2002-2008), where nodes are organisations and edges are projects
+		(2002 to 2008), where nodes are organisations and edges are projects
 		those organisations are collaborating on.}
 	\label{fig:midlands2002_2008Degree}
 \end{figure}
@@ -2327,7 +2327,7 @@ Projects that are related to one another in some way.
 	\centering
 	\includegraphics[width=0.7\textwidth]{midlands2002-2008/clustering.png}
 	\caption{Clustering coefficient distribution of the East Midlands funding
-	network (2002-2008), where nodes are organisations and edges are projects
+	network (2002 to 2008), where nodes are organisations and edges are projects
 	those organisations are collaborating on.
 	It shows that organisations are much more likely to only be involved in a
 	few collaborations, and organisations with high amounts of collaboration
