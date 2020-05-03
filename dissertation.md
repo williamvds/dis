@@ -1208,6 +1208,15 @@ were manually merged within Gephi.
 Gephi allows some graph properties to be analysed, including the degree
 distribution of nodes and (weighted) clustering coefficient.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{midlands2002-2008/degree.png}
+	\caption{Degree distribution of the East Midlands funding network
+		(2002 to 2008), where nodes are organisations and edges are projects
+		those organisations are collaborating on.}
+	\label{fig:midlands2002_2008Degree}
+\end{figure}
+
 The degree distribution shown in figure \ref{fig:midlands2002_2008Degree} is
 similar to that of the network as a whole (see [Amount of research]), with the
 vast majority of nodes (i.e. organisations) having a low number of connections,
@@ -1222,12 +1231,34 @@ that publicly funded research in the East Midlands region does not stand out
 significantly from other regions in terms of amount of research and its
 distribution.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{midlands2002-2008/weightedDegree.png}
+	\caption{Weighted degree distribution of the East Midlands funding
+	network (2002-2008), where nodes are organisations, edges are projects
+	those organisations are collaborating on, and the weight of edges is the
+	total spent on the project between both organisations.}
+	\label{fig:midlands2002_2008WeightedDegree}
+\end{figure}
+
 The weighted degree distribution (where each edge is multiplied by its weight)
 for the graph is shown in figure \ref{fig:midlands2002_2008WeightedDegree},
 where the weight is the cost of the project between the two organisations.  
 A similar pattern is shown to the degree distribution; lower values have
 significantly greater frequencies, and higher costs becoming rarer as indicated
 by the sparsity at higher values.  
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{midlands2002-2008/clustering.png}
+	\caption{Clustering coefficient distribution of the East Midlands funding
+	network (2002 to 2008), where nodes are organisations and edges are projects
+	those organisations are collaborating on.
+	It shows that organisations are much more likely to only be involved in a
+	few collaborations, and organisations with high amounts of collaboration
+	are few and far between.}
+	\label{fig:midlands2002_2008Clustering}
+\end{figure}
 
 The clustering coefficient is a measure of "the degree to which nodes tend to
 cluster together" (@opsahl2009clustering), originally attempted by
@@ -1335,6 +1366,18 @@ Degrees above 20 seem to have become rarer in the 2005 to 2010 time range, but t
 top degree is 172 compared to 2002 to 2008's 114. This suggests a lower amount of
 collaboration from most organisations in this later time period, but the top
 organisations are involved in more.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{nodeXLDegrees}
+	\caption{Degree distribution of the East Midlands funding network
+	(2005-2010), where nodes are organisations and edges are projects
+	those organisations are collaborating on.
+	It shows that organisations are much more likely to only be involved in
+	a few collaborations, and organisations with high amounts of
+	collaboration are few and far between.}
+	\label{fig:midlands2005_2010Degree}
+\end{figure}
 
 ### Visualisation
 
@@ -2303,49 +2346,6 @@ Projects that are related to one another in some way.
 		years 2002 to 2008}
 	\label{fig:midlands2002_2008}
 \end{sidewaysfigure}
-
-\begin{figure}
-	\centering
-	\includegraphics[width=0.7\textwidth]{midlands2002-2008/degree.png}
-	\caption{Degree distribution of the East Midlands funding network
-		(2002 to 2008), where nodes are organisations and edges are projects
-		those organisations are collaborating on.}
-	\label{fig:midlands2002_2008Degree}
-\end{figure}
-
-\begin{figure}
-	\centering
-	\includegraphics[width=0.7\textwidth]{midlands2002-2008/weightedDegree.png}
-	\caption{Weighted degree distribution of the East Midlands funding
-	network (2002-2008), where nodes are organisations, edges are projects
-	those organisations are collaborating on, and the weight of edges is the
-	total spent on the project between both organisations.}
-	\label{fig:midlands2002_2008WeightedDegree}
-\end{figure}
-
-\begin{figure}
-	\centering
-	\includegraphics[width=0.7\textwidth]{midlands2002-2008/clustering.png}
-	\caption{Clustering coefficient distribution of the East Midlands funding
-	network (2002 to 2008), where nodes are organisations and edges are projects
-	those organisations are collaborating on.
-	It shows that organisations are much more likely to only be involved in a
-	few collaborations, and organisations with high amounts of collaboration
-	are few and far between.}
-	\label{fig:midlands2002_2008Clustering}
-\end{figure}
-
-\begin{figure}
-	\centering
-	\includegraphics[width=0.7\textwidth]{nodeXLDegrees}
-	\caption{Degree distribution of the East Midlands funding network
-	(2005-2010), where nodes are organisations and edges are projects
-	those organisations are collaborating on.
-	It shows that organisations are much more likely to only be involved in
-	a few collaborations, and organisations with high amounts of
-	collaboration are few and far between.}
-	\label{fig:midlands2005_2010Degree}
-\end{figure}
 
 \begin{sidewaysfigure}
 	\subsection{East Midlands network (2005-2010)}
