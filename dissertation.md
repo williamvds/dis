@@ -261,6 +261,9 @@ historical data.
 	algorithms is be applied to automatically identify the single entity which
 	is being referred to. Some manual work was performed to clean up
 	remaining duplicates.
+	\
+	The data was sampled randomly to test the efficacy of linking &
+	de-duplication methods.
 \
 (1) __Analysing data__  
 	(i) Research and test useful tools
@@ -276,14 +279,15 @@ historical data.
 	An initial network analysis was performed on the linked data to
 	identify and visualise some interesting relationships between the entities.
 	\
-	A number of analysis algorithms were then applied to explore these
-	relationships.
+	Several algorithms were then applied to explore these relationships.
+	For network analysis, this included degree distributions and clustering
+	coefficients. Some statistical analysis of relationships were also applied.
 \
 (1) __Evaluating results__  
 	(i) Evaluate outcomes of analysis using metrics appropriate for each method
 	(i) Make conclusions to answer the desired questions
 	\
-	Relationships identified through network analysis were be evaluated to
+	Relationships identified through network analysis were evaluated to
 	explore how well they answer the research questions.
 
 \newpage
@@ -939,7 +943,7 @@ identified that the specified postcodes can be used to reliably identify whether
 similarly named records are indeed duplicates.  
 Hence, I decided to merge organisation records if the following conditions hold:
 
-1. Neither of the pair is listed as a invalid record
+1. Neither of the pair is listed as an invalid record
 1. The pair share at least 90% of trigrams in their names, or
 1. The pair share at least 50% of trigrams in the names, both have specified
    postcodes, and the postcodes match
@@ -1035,11 +1039,15 @@ or names are substituted for a single variation before comparison. However, this
 approach is limited by the requirement of domain knowledge being applied or a
 significant amount visual inspection being done.
 
-Name comparisons are more reliable when combined with the comparison of other
-information available, such as the addresses of organisations.  
+Combining name similarity with the comparison of other information available -
+such as the addresses of organisations - results in more records being linked.
 4871 of 47822 (10.2%) organisation records are detected as duplicates when the 
 heuristic is that they share 90% or more of trigrams in their name.
-By checking whether postcodes match, this number rises to 5935 (12.4%).
+By checking whether postcodes match, this number rises to 5935 (12.4%).  
+Manual testing of this method found 99 of 100 linked organisation records were
+indeed duplicates (though an additional 36 could not be determined). This
+suggests combining such contextual information is more effective than simply
+using name similarity.
 
 Limitations to these heuristics include:
 
@@ -1070,11 +1078,7 @@ topics of projects they have been involved in.
 
 A variety of organisations exist in the database, from universities, local
 councils, medical institutions, to private companies.  
-Through manually exploring the dataset, I found that these can often be
-identified from their names, e.g. universities will almost always have the word
-"University" in their names, and many hospitals will have the word "Hospital".
-
-I decided to create 4 groups:
+For the purposes of analysis, they have been grouped into four categories:
 
 - __Academic__: For academic institutions like universities, colleges, and other
   schools
@@ -1083,11 +1087,9 @@ I decided to create 4 groups:
 - __Private__: Privately owned corporations
 - __Public__: Government bodies and publicly funded institutions
 
-Names are the only data point used when grouping organisations, as they are
-the only related information on organisations contained within the Gateway to
-Research database.  
-Organisation records (and records that are listed as duplicates) are searched
-for keywords that indicate their type:
+Organizations are placed in each category based on pattern matching of the
+organization names. More precisely, organisation records (and records that are
+listed as duplicates) are searched for keywords that indicate their type:
 
 | Type     | Exemplary keywords                              |
 |----------|-------------------------------------------------|
@@ -1096,17 +1098,19 @@ for keywords that indicate their type:
 | Private  | Limited/LTD, Corporation, Company, Incorporated |
 | Public   | Council, Government, Governorate                |
 
-This type is stored as an additional field within the `orgs` table, which
-contains records which have been de-duplicated and no records determined to be
-invalid.  
+The organisation type is stored as an additional field within the organisations
+database table (`orgs`), which contains records which have been de-duplicated
+and cleansed of invalid records.  
 Grouping is performed in the procedure [classifyOrgs.sql].  
 After applying this procedure, 21694 of 39578 organisation records (54.8%) were
 given a type.
 
-I attempted to maximise the amount of keywords picked up by manually searching
-for common abbreviations, such as LTD, LLP, and PLC for private limited
-companies. The procedure also takes into account the optional period at the end
-of these abbreviations, such as "Uni." for "University".  
+The procedure was manually enhanced by refining the keyword list and controlling
+the scope of pattern matching.
+For example, abbreviations, such as LTD, LLP, and PLC are also used for
+identifying private limited companies alongside the 'Limited' keyword.
+The procedure also considers the optional period at the end of these
+abbreviations, such as "Uni." for "University".  
 Another issue is that of keyword overlap: e.g. is Albany Medical College a
 medical institution or an academic one? Through manual research we can discover
 that it is indeed an academic one, but as the procedure sets the group of
@@ -1146,14 +1150,11 @@ keywords.
 	\label{fig:orgTypeCounts}
 \end{figure}
 
-As just under half of organisations are not assigned a type, it is clear that
-using names alone is insufficient if the goal is to maximise the number of
-organisations grouped.  
-Another improvement would be to refer to a public database such as the UK's
-[Companies House](https://beta.companieshouse.gov.uk) service. This could be
-used to determine both the legal classification and the "nature of business"
-of an organisation, which may indicate the activities that the organisation
-takes part in.
+Due to the limitation of time, I have not endeavour to collect more information
+about individual organizations.
+For that purpose, a public database such as the UK's [Companies
+House](https://beta.companieshouse.gov.uk) service could be used to determine
+both the legal classification and the nature of business of an organisation.
 The nature of business is reported by the company themselves, and so may not be
 entirely reliable: e.g., the [Nottingham University Hospitals Trust
 Charity](https://beta.companieshouse.gov.uk/company/09978675) lists their nature
@@ -1164,6 +1165,13 @@ The categories used by Companies House are provided on their website:
 
 ## East Midlands network analysis and visualisation with Gephi
 
+In order to explore the structure of research ecosystems, network analysis was
+employed.
+A subset of the network was chosen so that patterns could be explored at a
+smaller scale.  
+Organisations were selected if they had 'East Midlands' specified as their
+region and had an active projected within the years 2002 and 2008.
+
 [Gephi](https://gephi.org) is a Java-based graph analysis tool, and was used to plot the
 network of organisations based in the East Midlands region or Nottingham.  
 This software was chosen as it is free and open source, and so it costs nothing
@@ -1172,12 +1180,10 @@ to quickly get to grips with the application in order to use it in this project.
 Through research I also found that it includes several features that enable
 network analysis and visualisation, the possibilities of which I was keen to
 apply to explore.  
-Organisations were selected if they had 'East Midlands' specified as their
-region and had an active projected within the years 2002 and 2008.
 
-Limiting the dataset in this manner resulted in analysis being much faster to
-perform, as only 238 of 39578 organisations match these criteria. Fewer records
-mean less computational power is needed to manipulate the dataset in Gephi.  
+Limiting the dataset used resulted in analysis being much faster to perform, as
+only 238 of 39578 organisations match these criteria. Fewer records mean less
+computational power is needed to manipulate the dataset in Gephi.  
 While Gephi is able to load the entire dataset if the Java virtual machine is
 allowed to use more system memory (e.g. by setting `_JAVA_OPTIONS="-Xms1024m
 -Xmx10000m"`), adjusting the layout, filtering, or calculating statistics still
@@ -1275,8 +1281,8 @@ triangles have a clustering coefficient of 0, and slightly fewer have a
 coefficient of 1. This indicates that there are a similar number of
 triplets of organisations that have collaborated with each other, as there are
 those that have never collaborated with each other.
-The remaining node triangles are distributed between these extremes, with
-coefficients higher than 0.5 being slightly more frequent.  
+The remaining node triangles are distributed between these extremes 0 and 1,
+with coefficients higher than 0.5 being slightly more frequent.  
 These results show that most of the network is highly connected, suggesting
 there are many organisations in the East Midlands that engage in research with
 many other organisations in this region. There is also a significant portion
@@ -1428,12 +1434,8 @@ Electronics Limited.
 
 ### Amount of research
 
-Organisations being involved in more publicly funded projects could imply that
-they are subject experts, and perform higher-quality research than other
-organisations. If this is the case, other organisations would be more interested
-in collaborating with them so that they can take advantage of the outcomes of
-the research.
-
+We can take the number of projects an organisation has been involved in to be an
+indicator of the amount of research activity they are involved in.
 If we explore organisations by the number of projects they are involved in, we
 can see that the top organisations are involved in significantly more projects
 than lower organisations. Below the 90th percentile, these organisations are
@@ -1787,8 +1789,9 @@ is a factor.
   does it change over time?
 
 Through aggregate analysis and specific analysis of the East Midlands network,
-a common pattern appears within the ecosystem wherein a few organisations and
-projects receive the vast majority of funding from UKRI and its subsidiaries.
+a common pattern appears within the ecosystem wherein a few organisations (4252,
+or 9.92%) and projects (9723, or 10.0%) receive the vast majority of funding
+from UKRI and its subsidiaries.
 This pattern applies to all types of organisation, though academic and
 privately-owned organisations are likelier to be among these top researchers.  
 Private organisations represent the overwhelming majority of all those taking
@@ -1796,13 +1799,23 @@ part in this research.
 
 Analysis of the East Midlands network reveals that the top researching
 organisations form hubs of research, wherein many organisations collaborate with
-solely this top organisation.  
-Comparing two different time periods in this network there is not much change
-within the ecosystem in terms of distribution of collaboration among the
-involved organisation. However, while the top academic and medical organisations
-remain at the top, the private organisations involved vary over time. This
-suggests private organisations do not always maintain the amount of research
-they are involved with as consistently as these other types of organisations.
+solely this top organisation.
+Within the 2002-2008 period, such hubs include:
+
+- The University of Nottingham: 114 collaborations
+- Loughborough University: 93
+- University Hospitals of Leicester: 68
+- Nottingham University Hospitals: 59
+- PERA Innovation: 38
+- Experian: 17
+
+Comparing two different time periods (2002-2008, and 2005-2010) in this network
+there reveals not much change within the ecosystem in terms of distribution of
+collaboration among the involved organisations. However, while the top academic
+and medical organisations remain at the top, the private organisations involved
+vary over time. This suggests private organisations do not always maintain the
+amount of research they are involved with as consistently as these other types
+of organisations.
 
 - What are the significant factors that influence collaboration between
   organisations?
