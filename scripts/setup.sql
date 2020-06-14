@@ -40,7 +40,7 @@ END $$; -- BEGIN
 DO $$ BEGIN
 	CREATE TYPE gtrSector as ENUM(
 		'Academic/University',
-		'Charity/Non-profit',
+		'Charity/Non Profit',
 		'Public',
 		'Private'
 	);
