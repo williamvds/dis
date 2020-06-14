@@ -48,7 +48,7 @@ LOOP
 		COALESCE(gtrRegion(org.region), gtrRegion('Unknown')),
 		org.country,
 		org.recorded
-	) ON CONFLICT DO UPDATE SET
+	) ON CONFLICT(orgUuid) DO UPDATE SET
 		recorded = org.recorded;
 END LOOP;
 
