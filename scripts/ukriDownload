@@ -4,6 +4,8 @@ PAUSE=4
 NUM_PAGES_XPATH='string(/*/@*[local-name()="totalPages"])'
 OUTPUT='.'
 
+set -e
+
 # Parse options: https://stackoverflow.com/a/14203146
 TYPES=()
 while [[ $# -gt 0 ]]; do
@@ -21,11 +23,11 @@ done
 set -- "${TYPES[@]}"
 
 if [ "${#TYPES[@]}" == 0 ]; then
-	echo "No record types specified"
-	exit 1
+	echo "No types specified: downloading all data"
+	TYPES=('org' 'out' 'per' 'pro')
 fi
 
-for typ in "$TYPES"; do
+for typ in "${TYPES[@]}"; do
 	case "$typ" in
 		or*) recordType='organisations';;
 		ou*) recordType='outcomes';;
@@ -46,30 +48,37 @@ for typ in "$TYPES"; do
 	}
 
 	function xmlCount {
-		awk '{s+=$1} END {print s}' <(xmllint --xpath 'count(/*/*)' $*)
+		awk '{s+=$1} END {print s}' <(xmllint --xpath 'count(/*/*)' "$@")
 	}
 
 	file1="$(getPageFile 1)"
 	curl "$(getPageURL 1)" -so "$file1"
 	numPages=$(xmllint --xpath "$NUM_PAGES_XPATH" "$file1")
+	merged="$OUTPUT/$recordType.xml"
 
+	if [ -z "$numPages" ]; then
+		echo "Downloaded $recordType"
+		cp "$file1" "$merged"
+		continue
+	fi
+
+	echo "Downloading $recordType"
 	echo "Total pages: $numPages"
 
-	for i in $(seq 2 $numPages); do
-		file="$(getPageFile $i)"
+	for i in $(seq 2 "$numPages"); do
+		file="$(getPageFile "$i")"
 		[ -f "$file" ] && continue
 		sleep "$PAUSE"
 		echo "Downloading page $i of $numPages"
-		curl "$(getPageURL $i)" -so "$file"
+		curl "$(getPageURL "$i")" -so "$file"
 		[ $? ] || break
 	done
 
-	merged="$OUTPUT/$recordType.xml"
-	pages="$OUTPUT/$recordType/*.xml"
+	pages=("$OUTPUT/$recordType"/*.xml)
 	if ! [ -f "$merged" ] || \
-	   ! [ "$(xmlCount "$merged")" = "$(xmlCount "$pages")" ]; then
+	   ! [ "$(xmlCount "$merged")" = "$(xmlCount "${pages[@]}")" ]; then
 		echo "Merging into a single file..."
-		"$(basename $0)"/mergeXML "$pages" >"$merged"
+		"$(dirname "$0")"/mergeXML "${pages[@]}" >"$merged"
 	else
 		echo "Merged file contains all records: $merged"
 	fi
