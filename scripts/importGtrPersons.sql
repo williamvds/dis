@@ -73,8 +73,8 @@ LOOP
 					WHEN link.rel = 'FELLOW_PER'       THEN 'Fellow'
 					WHEN link.rel = 'TGH_PER'          THEN 'Training Grant Holder'
 					WHEN link.rel = 'SUPER_PER'        THEN 'Primary Supervisor'
-					WHEN link.rel = 'RESERACH_COI_PER' THEN 'Researcher Co-Investigator'
-					WHEN link.rel = 'RESERACH_PER'     THEN 'Researcher'
+					WHEN link.rel = 'RESEARCH_COI_PER' THEN 'Researcher Co-Investigator'
+					WHEN link.rel = 'RESEARCH_PER'     THEN 'Researcher'
 					ELSE link.rel::gtrPersonRole
 				END)::gtrPersonRole
 			) ON CONFLICT DO NOTHING;
