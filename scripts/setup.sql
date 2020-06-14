@@ -76,46 +76,6 @@ EXCEPTION
 END $$; -- BEGIN
 
 DO $$ BEGIN
-	CREATE TYPE gtrGrantCategory as ENUM(
-		'BIS-Funded Programmes',
-		'Centres',
-		'Collaborative R&D',
-		'CR&D Bilateral',
-		'EU-Funded',
-		'European Enterprise Network',
-		'Fast Track',
-		'Feasibility Studies',
-		'Fellowship',
-		'GRD Development of Prototype',
-		'GRD Proof of Concept',
-		'GRD Proof of Market',
-		'Intramural',
-		'Knowledge Transfer Network',
-		'Knowledge Transfer Partnership',
-		'Large Project',
-		'Launchpad',
-		'Legacy Department of Trade & Industry',
-		'Legacy RDA Collaborative R&D',
-		'Legacy RDA Grant for R&D',
-		'Missions',
-		'Other Grant',
-		'Procurement',
-		'Research Grant',
-		'Small Business Research Initiative',
-		'SME Support',
-		'Special Interest Group',
-		'Studentship',
-		'Study',
-		'Third Party Grant',
-		'Training Grant',
-		'Unknown',
-		'Vouchers'
-	);
-EXCEPTION
-	WHEN duplicate_object THEN null;
-END $$; -- BEGIN
-
-DO $$ BEGIN
 	CREATE TYPE gtrFunder as ENUM(
 		'AHRC',
 		'BBSRC',
@@ -136,7 +96,7 @@ CREATE TABLE IF NOT EXISTS gtrProjects(
 	projectUuid uuid PRIMARY KEY NOT NULL,
 	title text not null,
 	status gtrProjectStatus,
-	category gtrGrantCategory,
+	category text,
 	leadFunder gtrFunder,
 	abstract text,
 	techAbstract text,

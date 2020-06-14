@@ -65,7 +65,7 @@ SELECT
 	REPLACE(title, '&amp;', '&'),
 	status::gtrProjectStatus,
 	-- XML entities aren't parsed, so manually convert ampersands
-	REPLACE(category, '&amp;', '&')::gtrGrantCategory,
+	REPLACE(category, '&amp;', '&'),
 	funder::gtrFunder,
 	abstract,
 	techAbstract,
