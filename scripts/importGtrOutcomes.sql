@@ -84,7 +84,7 @@ LOOP
 		outcome.partnerContribution,
 		date(outcome.startDate),
 		date(outcome.endDate),
-		outcome.sector,
+		outcome.sector::gtrSector,
 		outcome.country,
 		outcome.impact,
 		outcome.supportingUrl
@@ -150,7 +150,7 @@ LOOP
 		outcome.fundingId,
 		date(outcome.startDate),
 		date(outcome.endDate),
-		outcome.sector,
+		outcome.sector::gtrSector,
 		outcome.country
 	) ON CONFLICT DO NOTHING;
 END LOOP;
@@ -182,7 +182,7 @@ LOOP
 		outcome.summary,
 		outcome.beneficiaries,
 		outcome.contributionMethod,
-		outcome.sector,
+		outcome.sector::gtrSector,
 		outcome.firstYearOfImpact::int
 	) ON CONFLICT DO NOTHING;
 END LOOP;
